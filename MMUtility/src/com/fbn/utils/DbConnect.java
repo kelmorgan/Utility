@@ -12,7 +12,6 @@ public class DbConnect implements ConstantsI{
 		try {
 			this.sessionId = getConnection();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -78,13 +77,7 @@ public class DbConnect implements ConstantsI{
     
     
    public String getData() {
-        
-        try {
-       
-        	return WFCallBroker.execute(queryXml, AppServerIp, WrapperPort, 1);
-           
-            } catch (Exception e){          
-              }
+        try { return WFCallBroker.execute(queryXml, AppServerIp, WrapperPort, 1); } catch (Exception e){}
             return null;
      }
 

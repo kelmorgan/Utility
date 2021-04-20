@@ -14,10 +14,7 @@ public class startUtility implements ConstantsI{
 			  System.out.println(new DbConnect(RequestXML.selectRequestQuery(CabinetName, obj.getSessionId(), Query.selectAllBid())).getData());
 		
 		} catch (Exception e) {
-			
 			e.printStackTrace();
 		}
-	    
 	  }
-
 }
