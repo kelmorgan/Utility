@@ -16,7 +16,7 @@ public interface ConstantsI {
 	String SdateLimit = "2015-05-31 00:00:00";
 	String batchlimit = "10";
 	String QueueId = "641";
-;
+	String configPath = "";
 	
 
 

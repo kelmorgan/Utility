@@ -25,7 +25,7 @@ public class DbConnect implements ConstantsI{
         
         try {
         
-             String strxmlin = RequestXML.ConnectCabinetXML(CabinetName, UserName, Password); 
+             String strxmlin = RequestXML.connectCabinetXML(CabinetName, UserName, Password);
              System.out.println("strxmlin : " + strxmlin);
     
              String strXmlout = WFCallBroker.execute(strxmlin, AppServerIp, WrapperPort, 0);
@@ -59,7 +59,7 @@ public class DbConnect implements ConstantsI{
       
     } 
     
-    public String selectBids() {
+    private String selectBids() {
         String strOutputXml = "";
         
         try {

@@ -16,7 +16,7 @@ import ISPack.ISUtil.JPISIsIndex;
 
 public class RequestXML {
 	
-    public static String ConnectCabinetXML(String strCabinetName, String strUserName, String strPassword){
+    public static String connectCabinetXML(String strCabinetName, String strUserName, String strPassword){
             StringBuffer strBuffer = null;
         
             strBuffer = new StringBuffer();
@@ -63,8 +63,6 @@ public class RequestXML {
             String attribute,
 			   String Documentsfields) 
 {
-
-
 return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem</Option>\n"
 + "<EngineName>"+cabinetName+"</EngineName>\n"
 + "<SessionId>"+sessionID+"</SessionId>\n"
@@ -78,7 +76,7 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 	
 	public String getWMCompleteWorkItemXml(String cabinetName,
 			String sessionId, String processInstanceId, String workItemId) {
-		String xml = "<?xml version=\"1.0\"?>\n"
+		return "<?xml version=\"1.0\"?>\n"
 			+ "<WMCompleteWorkItem_Input>\n"
 			+ "<Option>WMCompleteWorkItem</Option>\n"
 			+ "<EngineName>" + cabinetName + "</EngineName>\n"
@@ -87,8 +85,6 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 			+ "<WorkItemId>" + workItemId + "</WorkItemId>\n"
 			+ "<CountFlag>Y</CountFlag>\n"
 			+ "</WMCompleteWorkItem_Input>\n";
-
-		return xml;
 	}
 
 	
@@ -131,7 +127,7 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 
 	public String getGetWorkItemInputXml(String cabinetName,
 			String sessionId, String processInstanceId, String workItemId) {
-		String xml = "<?xml version=\"1.0\" ?>\n"
+	return  "<?xml version=\"1.0\" ?>\n"
 				+ "<WMGetWorkItem_Input>\n"
 				+ "<Option>WMGetWorkItem</Option>\n" 
 				+ "<EngineName>"+ cabinetName + "</EngineName>\n" 
@@ -139,13 +135,11 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 				+ "<ProcessInstanceId>"+ processInstanceId + "</ProcessInstanceId>\n"
 				+ "<WorkItemId>" + workItemId + "</WorkItemId>\n"
 				+ "</WMGetWorkItem_Input>";
-
-		return xml;
 	}
 	
 	public String getGetUnlockWorkItemInputXml(String cabinetName,
 			String sessionId, String processInstanceId, String workItemId) {
-		String xml = "<?xml version=\"1.0\" ?>\n"
+		return "<?xml version=\"1.0\" ?>\n"
 				+ "<WMUnlockWorkItem_Input>\n"
 				+ "<Option>WMUnlockWorkItem</Option>\n" 
 				+ "<EngineName>"+ cabinetName + "</EngineName>\n" 
@@ -153,12 +147,10 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 				+ "<ProcessInstanceId>"+ processInstanceId + "</ProcessInstanceId>\n"
 				+ "<WorkItemId>" + workItemId + "</WorkItemId>\n"
 				+ "</WMUnlockWorkItem_Input>";
-
-		return xml;
 	}
 	public String getConnectInputXml(String cabinetName, String username,
 			String password) {
-		String connectInputXML = "<?xml version=\"1.0\"?>\n"
+		return "<?xml version=\"1.0\"?>\n"
 				+ "<WMConnect_Input>\n" 
 				+ "<Option>WMConnect</Option>\n"
 				+ "<EngineName>" + cabinetName + "</EngineName>\n"
@@ -171,13 +163,11 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 				+ "<ParticipantType>F</ParticipantType>\n" 
 				+ "</Particpant>\n"
 				+ "</WMConnect_Input>";
-
-		return connectInputXML;
 	}
 
 	public String getFetchWorkItemAttributesXml(String processInstanceId,
 			String workItemId, String sessionId, String cabinetName) {
-		String xml = "<?xml version=\"1.0\" ?>\n"
+		return "<?xml version=\"1.0\" ?>\n"
 				+ "<WMFetchWorkItemAttributes_Input>\n"
 				+ "<Option>WMFetchWorkItemAttributes</Option>\n"
 				+ "<EngineName>" + cabinetName + "</EngineName>\n"
@@ -185,13 +175,11 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 				+ "<ProcessInstanceId>" + processInstanceId+ "</ProcessInstanceId>\n" 
 				+ "<WorkItemId>" + workItemId+ "</WorkItemId>\n" 
 				+ "</WMFetchWorkItemAttributes_Input>";
-
-		return xml;
 	}
 	
 	public String getGetWorkItemAttributeValueXml(String processInstanceId,
 			String workItemId, String sessionId, String cabinetName,String attributeName) {
-		String xml = "<?xml version=\"1.0\" ?>\n"
+		return "<?xml version=\"1.0\" ?>\n"
 				+ "<WMGetWorkItemAttributeValue_Input>\n"
 					+ "<Option>WMGetWorkItemAttributeValue</Option>\n"
 					+ "<EngineName>"+cabinetName+"</EngineName>\n"
@@ -202,7 +190,6 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 						+ "<Name>"+attributeName+"</Name>\n"
 					+ "</Attribute>\n"
 				+ "</ WMGetWorkItemAttributeValue_Input>" ;
-		return xml;
 	}
 
 	public String getWFUploadWorkItemInputXml(String cabinetName,
@@ -253,7 +240,7 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 	
 	public String getNGODeleteFolderInputXml(String cabinetName,
 			String sessionId, String folderIndex, String parentFolderIndex) {
-		String xml = "<?xml version=\"1.0\"?>\n"
+		return "<?xml version=\"1.0\"?>\n"
 				+ "<NGODeleteFolder_Input>\n"
 				+ "<Option>NGODeleteFolder</Option>\n"
 				+ "<CabinetName>" + cabinetName + "</CabinetName>\n"
@@ -263,13 +250,11 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 				+ "<CheckOutFlag>Y</CheckOutFlag>\n"
 				+ "<LockFlag>Y</LockFlag>\n"
 				+ "</NGODeleteFolder_Input>";
-
-		return xml;
 	}
 
 	public String getNGODeleteDocumentExtInputXml(String cabinetName,
 			String sessionId, String docIndex, String parentFolderIndex) {
-		String xml = "<?xml version=\"1.0\"?>\n"
+		return "<?xml version=\"1.0\"?>\n"
 				+ "<NGODeleteDocumentExt_Input>\n"
 				+ "<Option>NGODeleteDocumentExt</Option>\n"
 				+ "<CabinetName>" + cabinetName + "</CabinetName>\n"
@@ -282,14 +267,12 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 				+ "</Document>\n"
 				+ "</Documents>\n" 
 				+ "</NGODeleteDocumentExt_Input>";
-
-		return xml;
 	}
 
 	public String getFetchWorkItemsInputXml(String processInstanceId,
 			String lastWorkItemId, String sessionId, String cabinetName,
 			String queueId,String noOfRecords) {
-		String xml = "<?xml version=\"1.0\"?>\n"
+		return "<?xml version=\"1.0\"?>\n"
 				+ "<WMFetchWorkItems_Input>\n"
 				+ "<Option>WMFetchWorkItem</Option>\n" 
 				+ "<EngineName>"+ cabinetName+ "</EngineName>\n"
@@ -302,14 +285,12 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 				+ "<LastProcessInstance>"+ processInstanceId+ "</LastProcessInstance>\n"
 				+ "</BatchInfo>\n" 
 				+ "</WMFetchWorkItems_Input>";
-
-		return xml;
 	}
 
 	public String getFetchWorkItemsListInputXml(String processInstanceId,
 			String lastWorkItemId, String sessionId, String cabinetName,
 			String queueId,String noOfRecords) {
-		String xml = "<?xml version=\"1.0\"?>\n"
+		return "<?xml version=\"1.0\"?>\n"
 				+ "<WMFetchWorkList_Input>\n"
 				+ "<Option>WMFetchWorkList</Option>\n" 
 				+ "<EngineName>"+ cabinetName+ "</EngineName>\n"
@@ -322,8 +303,6 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 				+ "<LastProcessInstance>"+ processInstanceId+ "</LastProcessInstance>\n"
 				+ "</BatchInfo>\n" 
 				+ "</WMFetchWorkList_Input>";
-
-		return xml;
 	}
 
 	public static String getWMGetProcessListInputXml(String cabinetName,
@@ -477,14 +456,13 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 	
 	public String getAPSelectWithColumnNameInputXml(String query,String database) {
 
-		String inXml=
+		return
 			"<?xml version=\"1.0\"?>\n"
 			+"<APSelect_Input>\n"
 			+"<Option>APSelectWithColumnNames</Option>\n"
 			+"<Query>" + query + "</Query>\n"
 			+"<EngineName>" + database+ "</EngineName>\n"
-			+"</APSelect_Input>\n";	
-		return inXml;
+			+"</APSelect_Input>\n";
 	}
 	
 	public String getAPInsertInputXml(String engineName,
@@ -635,7 +613,7 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 			}
 		}
 
-		String sInputXML = "<?xml version=\"1.0\"?>\n"
+		return "<?xml version=\"1.0\"?>\n"
 				+ "<WFAddToMailQueue_Input>\n"
 				+ "<Option>WFAddToMailQueue</Option>\n" 
 				+ "<EngineName>"+ cabinetname+ "</EngineName>\n"
@@ -649,7 +627,6 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 				+ "<AttachmentNames>"+ AttachmentName+ ";</AttachmentNames>\n"
 				+ "<AttachmentExts></AttachmentExts>\n"
 				+ "</WFAddToMailQueue_Input>";
-		return sInputXML;
 
 	}
 
@@ -659,16 +636,6 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 		JPISDEC.m_cDocumentType = 'N';
 		JPISDEC.m_sVolumeId = Short.parseShort(volumeID);
 		JPISIsIndex IsIndex = new JPISIsIndex();
-
-		/*mLogger = MyLogger.getLoggerInstance(GenerateXml.class);
-		mLogger.info("Before AddDocument_MT Completion");
-		mLogger.info("(short)(Integer.parseInt(port)) : "
-				+ (short) (Integer.parseInt(port)));
-		mLogger.info("serverIP : " + serverIP);
-		mLogger.info("cabinetname : " + cabinetname);
-		mLogger.info("fppp.getPath() : " + fppp.getPath());
-		mLogger.info("JPISDEC.m_sVolumeId : " + JPISDEC.m_sVolumeId);*/
-
 		try {
 			if (port.startsWith("33")) {
 				CPISDocumentTxn.AddDocument_MT(null, serverIP, (short) (Integer
@@ -678,27 +645,20 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 				CPISDocumentTxn.AddDocument_MT(null, serverIP, (short) (Integer
 						.parseInt(port)), cabinetname, JPISDEC.m_sVolumeId,
 						fppp.getPath(), JPISDEC, "", "JNDI", IsIndex);
-				// CPISDocumentTxn.AddDocument_MT(null,IP2,(short)(Port2),cab2,JPISDEC2.m_sVolumeId,
-				// filetobeaddedpath, JPISDEC2, "","JNDI",IsIndex2);
 			}
 
-//			mLogger.info("AddDocument_MT Completed successfully");
 		} catch (Exception e) {
-//			mLogger.info("Exception in CPISDocumentTxn");
 		} catch (JPISException e) {
-//			mLogger.info("Exception in CPISDocumentTxn : " + e);
 			final Writer result = new StringWriter();
 			final PrintWriter printWriter = new PrintWriter(result);
 			e.printStackTrace(printWriter);
-			/*mLogger.error("Exception in CPISDocumentTxn  2 "
-					+ result.toString());*/
 		}
 		return IsIndex;
 	}
 	
 	public String getWMFetchWorkListWithLockInputXml(String engineName, 
 			String sessionId, String queueId) {
-		String xml = "<?xml version=\"1.0\"?>\n"
+		return "<?xml version=\"1.0\"?>\n"
 			+ "<WFFetchWorkItemsWithLock_Input>\n"
 			+ "<Option>WFFetchWorkItemsWithLock</Option>\n"
 			+ "<EngineName>" + engineName + "</EngineName>\n"
@@ -708,7 +668,6 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 			+ "<CountFlag>Y</CountFlag>\n"
 			+ "<OrderBy>2</OrderBy>\n" //order by ProcessInstanceId
 			+ "</WFFetchWorkItemsWithLock_Input>\n";
-		return xml;
 	}
 	
 	/**
@@ -728,7 +687,7 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 	 */
 	public String getWMFetchWorkListWithLockInputXmlNew(String engineName, 
 			String sessionId, String queueId,String batchSize,String lastProcessIntanceId,String orderBy,String sortOrder) {
-		String xml = "<?xml version=\"1.0\"?>\n"
+		return "<?xml version=\"1.0\"?>\n"
 			+ "<WFFetchWorkItemsWithLock_Input>\n"
 			+ "<Option>WFFetchWorkItemsWithLock</Option>\n"
 			+ "<EngineName>" + engineName + "</EngineName>\n"
@@ -743,7 +702,6 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 			+ "<DataFlag>Y</DataFlag>\n"
 			+ "<CountFlag>Y</CountFlag>\n"
 			+ "</WFFetchWorkItemsWithLock_Input>\n";
-		return xml;
 	}
 	
 	/**
@@ -767,7 +725,7 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 			String sessionId, String queueId, String batchSize,
 			String lastValue, String lastWorkItemId,
 			String lastProcessIntanceId, String orderBy, String sortOrder) {
-		String xml = "<?xml version=\"1.0\"?>\n"
+		return "<?xml version=\"1.0\"?>\n"
 			+ "<WFFetchWorkItemsWithLock_Input>\n"
 			+ "<Option>WFFetchWorkItemsWithLock</Option>\n"
 			+ "<EngineName>" + engineName + "</EngineName>\n"
@@ -784,33 +742,11 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 			+ "<DataFlag>Y</DataFlag>\n"
 			+ "<CountFlag>Y</CountFlag>\n"
 			+ "</WFFetchWorkItemsWithLock_Input>\n";
-		return xml;
 	}
-	/*public String getWMFetchWorkListWithLockWithWhereClauseInputXml(String engineName, 
-			String sessionId, String queueId, String whereClauseCriteria) {
-		String xml = "<?xml version=\"1.0\"?>"
-			+ "<WFFetchWorkItemsWithLock_Input>"
-			+ "<Option>WFFetchWorkItemsWithLock</Option>"
-			+ "<EngineName>" + engineName + "</EngineName>"
-			+ "<SessionId>" + sessionId + "</SessionId>"
-			+ "<QueueId>" + queueId + "</QueueId>"
-			+ "<DataFlag>Y</DataFlag>"
-			+ "<CountFlag>Y</CountFlag>"
-			+ "<OrderBy>2</OrderBy>" //order by ProcessInstanceId
-			+ "<Filter>"
-				+ "<Type>256</Type>"
-				+ "<Comparison>0</Comparison>"
-				+ "<FilterString>"+whereClauseCriteria+"</FilterString>"
-				+ "<Length>0</Length>"
-			+ "</Filter>"
-			+ "</WFFetchWorkItemsWithLock_Input>";
-		return xml;
-	}*/
-	
 	public String getWMSetAttributesInputXml(String engineName, 
 			String sessionId, String processInstanceId, String workItemId,
 			String columnName, String colValue) {
-		String xml = "<?xml version=\"1.0\"?>"
+		return "<?xml version=\"1.0\"?>"
 			+ "<WFSetAttributes_Input>"
 			+ "<Option>WMAssignWorkItemAttributes</Option>"
 			+ "<EngineName>" + engineName + "</EngineName>"
@@ -824,7 +760,6 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 				+ "</Attribute>" 
 			+ "</Attributes>"
 			+ "</WFSetAttributes_Input>";
-		return xml;
 	}
 	
 	public static String getWMSetAttributesInputXmlNew(String engineName, 
@@ -854,31 +789,6 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 		return xml;
 	}
 	
-	public static void main(String[] args) {
-		HashMap<String,String> hm=new HashMap<String,String>();
-		hm.put("key1", "value1");
-		hm.put("key2", "value2");
-		
-		//boolean flag=false;
-		if(hm!=null && hm.size()>0){
-			Set<String> keySet=hm.keySet();
-			if(keySet!=null && keySet.size()>0){
-				for(String key : keySet){
-					String value=hm.get(key);
-					if(value!=null && Integer.parseInt(value)>0){
-						continue;
-					}
-				}
-			}
-			
-		}
-		try{
-			
-		}catch(Exception e){
-			
-		}
-	}
-	
 	public String getNGOGetDocumentListExtInputXml(String cabinetName,
 			String sessionId, String folderIndex, String noOfRecordsToFetch) {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -903,29 +813,14 @@ return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem<
 				+ "<Name>"+ docName + "</Name>"
 				+ "</NGOSearchDocumentExt_Input>";
 	}
-	
-	/*public String getMessageTransmissionStatusInputXML(String correlationId,String fccRefNo) {
-		return 	"<transmission_status_request>\n"
-				+"<request_details>\n"
-					+"<correlation_id>"+correlationId+"</correlation_id>\n"
-					+"<client_name>NEWGEN</client_name>\n"
-					+"<criteria>MESSAGE_REFERENCE_NUMBER</criteria>\n" 
-				+"</request_details>\n"
-				+"<parameters>\n"
-					+"<value>"+fccRefNo+"</value>\n" 
-				+"</parameters>\n"
-				+"</transmission_status_request>\n";
-	}*/
-	
+
 	public String getWMDisconnectInputXml(String cabinetName, String sessionId) {
-		String disconnectInputXml = "<?xml version=\"1.0\"?>" 
+		return "<?xml version=\"1.0\"?>"
 			+ "<WMDisConnect_Input>\n"
 				+ "<Option>WMDisConnect</Option>\n" 
 				+ "<EngineName>"+cabinetName+"</EngineName>\n"
 				+ "<SessionID>"+sessionId+"</SessionID>\n" 
 			+ "</WMDisConnect_Input>\n";
-
-		return disconnectInputXml;
 	}
 
 }

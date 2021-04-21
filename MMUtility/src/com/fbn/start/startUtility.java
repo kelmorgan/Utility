@@ -3,6 +3,7 @@ import com.fbn.api.RequestXML;
 import com.fbn.utils.ConstantsI;
 import com.fbn.utils.DbConnect;
 import com.fbn.utils.Query;
+import com.fbn.utils.XmlParser;
 
 
 public class startUtility implements ConstantsI{
@@ -11,7 +12,9 @@ public class startUtility implements ConstantsI{
 		  DbConnect obj = new DbConnect();
 		  
 		  try {
-			  System.out.println(new DbConnect(RequestXML.selectRequestQuery(CabinetName, obj.getSessionId(), Query.selectAllBid())).getData());
+			  String xml = new DbConnect(RequestXML.selectRequestQuery(CabinetName, obj.getSessionId(), Query.selectBids())).getData();
+
+			  System.out.println(XmlParser.getXMLData(xml,"Record"));
 		
 		} catch (Exception e) {
 			e.printStackTrace();
