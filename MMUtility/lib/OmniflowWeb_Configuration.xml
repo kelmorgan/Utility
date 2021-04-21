@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- ===================================================================== --><!--  Omniapp Configuration                                        --><!-- ===================================================================== --><PathInfo>
+	<Location>
+		<Name>OA_Config_Location</Name>
+		<Path></Path>
+	</Location>
+	<Location>
+		<Name>CF_Config_Location</Name>
+		<Path></Path>
+	</Location>
+	<Location>
+		<Name>CF_Uploaded_File_Location</Name>
+		<Path></Path>
+	</Location>
+	<Location>
+		<Name>CR_Config_Location</Name>
+		<Path></Path>
+	</Location>
+	<Location>
+		<Name>WCL_Config_Location</Name>
+		<Path></Path>
+	</Location>
+	<Location>
+		<Name>OFS_Config_Location</Name>
+		<Path></Path>
+	</Location>
+	<Location>
+		<Name>TMS_Config_Location</Name>
+		<Path></Path>
+	</Location>
+	<Location>
+		<Name>RM_Config_Location</Name>
+		<Path></Path>
+	</Location>
+	<Location>
+		<Name>PM_Web_Config_Location</Name>
+		<Path></Path>
+	</Location>
+<Location>
+		<Name>SEC_Config_Location</Name>
+		<Path>/was/IBM/WebSphere/AppServer/profiles/newgenconfig/omniflowconfiguration</Path>
+	</Location>
+</PathInfo>

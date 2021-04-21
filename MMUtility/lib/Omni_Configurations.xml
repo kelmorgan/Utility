@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- ===================================================================== -->
+<!--  OmniDocs Server Configuration                                        -->
+<!-- ===================================================================== -->
+<PathInfo>		
+	<Location>	
+		<Name>Omni_Config_Location</Name>
+		<Path>/was/IBM/WebSphere/AppServer/profiles/newgenconfig/odconfiguration</Path>
+		<CustomProperty>relativepath</CustomProperty>
+	</Location>
+</PathInfo>

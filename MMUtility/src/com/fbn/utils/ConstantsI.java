@@ -7,8 +7,10 @@ public interface ConstantsI {
 	String ProcessdefID = "27";
 	String ProcessName = "";
 
-	String AppServerType = "JTS";
-	String AppServerPort = "2809";
+	// AppServerType = "JTS";
+	String AppServerType = "WebSphere";
+	//String AppServerPort = "2809";
+	String AppServerPort = "9811";
 	int WrapperPort = 3333;
 	String UserName = "FBNTreasuryUtilityUser";
 	String Password = "system12345#";
