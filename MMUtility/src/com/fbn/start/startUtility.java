@@ -8,7 +8,7 @@ import com.fbn.utils.Query;
 public class startUtility implements ConstantsI{
 	
 	  public static void main(String[] args) {
-		  System.out.println(new DbConnect(RequestXml.selectRequestQuery(cabinetName,1, Query.getBidTblQuery())));
+		  System.out.println(new DbConnect(RequestXml.selectRequestQuery(cabinetName,1, Query.getBidTblQuery())).getData());
 
 	  }
 }
