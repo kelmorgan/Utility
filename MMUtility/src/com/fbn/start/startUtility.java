@@ -9,7 +9,7 @@ import com.fbn.utils.Query;
 public class startUtility implements ConstantsI{
 	
 	  public static void main(String[] args) {
-	  	  String attribute = "<cp_utilityFlag>Y</cp_utilityFlag>";
+	  	  String attribute = "<CP_UTILITYFLAG>Y</CP_UTILITYFLAG>";
 		  System.out.println(new Controller().getCreatedWorkItem(new Controller().getSessionId(),attribute));
 
 	  }

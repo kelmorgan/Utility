@@ -47,18 +47,38 @@ public class RequestXml  {
 		return stringBuilder.toString();
 	}
 
-	public  static String getCreateWorkItemXml(String cabinetName, String sessionId, String processDefId,String queueId,String attributes){
+	public  static String getCreateWorkItemXml1(String cabinetName, String sessionId, String processDefId,String queueId,String attributes){
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("<?xml version=1.0?>");
 		stringBuilder.append("<WFUploadWorkItem_Input>");
 		stringBuilder.append("<Option>WFUploadWorkItem</Option>");
-		stringBuilder.append("<EngineName>").append(cabinetName).append("</Engine>");
+		stringBuilder.append("<EngineName>").append(cabinetName).append("</EngineName>");
 		stringBuilder.append("<SessionId>").append(sessionId).append("</SessionId>");
 		stringBuilder.append("<ProcessDefId>").append(processDefId).append("</ProcessDefId>");
 		stringBuilder.append("<VariantId></VariantId>");
 		stringBuilder.append("<QueueId>").append(queueId).append("</QueueId>");
 		stringBuilder.append("<InitiateFromActivityId></InitiateFromActivityId>");
 		stringBuilder.append("<InitiateAlso>Y</InitiateAlso>");
+		stringBuilder.append("<Attributes>").append(attributes).append("</Attributes>");
+		stringBuilder.append("<Documents></Documents>");
+		stringBuilder.append("</WFUploadWorkItem_Input>");
+		return stringBuilder.toString();
+	}
+	
+	public  static String getCreateWorkItemXml(String cabinetName, String sessionId, String processDefId,String queueId,String attributes){
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("<?xml version=1.0?>");
+		stringBuilder.append("<WFUploadWorkItem_Input>");
+		stringBuilder.append("<Option>WFUploadWorkItem</Option>");
+		stringBuilder.append("<EngineName>").append(cabinetName).append("</EngineName>");
+		stringBuilder.append("<SessionId>").append(sessionId).append("</SessionId>");
+		stringBuilder.append("<ProcessDefId>").append(processDefId).append("</ProcessDefId>");
+		stringBuilder.append("<QueueId>").append(queueId).append("</QueueId>");
+		stringBuilder.append("<DataDefName></DataDefName>");
+		stringBuilder.append("<UserDefVarFlag>Y</UserDefVarFlag>");
+		stringBuilder.append("<Fields></Fields>");
+		stringBuilder.append("<InitiateAlso>Y</InitiateAlso>");
+		stringBuilder.append("<InitiateFromActivityId/>");
 		stringBuilder.append("<Attributes>").append(attributes).append("</Attributes>");
 		stringBuilder.append("<Documents></Documents>");
 		stringBuilder.append("</WFUploadWorkItem_Input>");
@@ -84,6 +104,7 @@ public class RequestXml  {
 				+ "<SessionId>"+ sessionId + "</SessionId>\n"
 				+ "<ProcessInstanceId>"+ processInstanceId + "</ProcessInstanceId>\n"
 				+ "<WorkItemId>1</WorkItemId>\n"
+				+"<Admin>Y</Admin>"
 				+ "</WMUnlockWorkItem_Input>";
 	}
 	public String getCompleteWorkItemXml(String cabinetName,

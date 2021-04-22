@@ -36,6 +36,10 @@ public class Controller implements ConstantsI {
         }
         return null;
     }
+    
+    public void completeWorkItem () {
+    	
+    }
     private boolean success(String response){
         return response.equalsIgnoreCase("0");
     }
