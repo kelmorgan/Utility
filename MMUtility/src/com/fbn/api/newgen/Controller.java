@@ -7,7 +7,7 @@ public class Controller implements ConstantsI {
     XmlParser xmlParser = new XmlParser();
 
     public String getSessionId(){
-        String connectXml = RequestXml.connectCabinetXml(cabinetName,userName,password);
+        String connectXml = RequestXml.getConnectCabinetXml(cabinetName,userName,password);
         try {
             String connectOutputXml = Api.executeCall(connectXml);
             xmlParser.setInputXML(connectOutputXml);
