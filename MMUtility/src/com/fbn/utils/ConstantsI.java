@@ -15,7 +15,8 @@ public interface ConstantsI {
 	String queueId = "1143";
 	String configPath = "";
 	String wiName = "FBN-00000000000134-MMW";
-	
+	String dbDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+	String flag = "Y";
 
 
 }
