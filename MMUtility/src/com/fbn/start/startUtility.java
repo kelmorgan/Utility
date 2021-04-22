@@ -9,6 +9,6 @@ public class startUtility implements ConstantsI{
 	
 	  public static void main(String[] args) {
 	  //	String winame = CreateWorkItem.createWorkItem("<CP_UTILITYFLAG>Y<CP_UTILITYFLAG>");
-		  CompleteWorkItem.completeWorkItem(wiName);
+		  new CompleteWorkItem(wiName);
 	  }
 }
