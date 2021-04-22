@@ -162,10 +162,12 @@ public class RequestXml  {
 		stringBuilder.append("<Attributes>");
 		stringBuilder.append("<Attribute>");
 		stringBuilder.append("<Name>").append(attributeName).append("</Name>");
-		stringBuilder.append("<Type></Type>");
+		stringBuilder.append("<Type>10</Type>");
 		stringBuilder.append("<Value>").append(value).append("</Value>");
 		stringBuilder.append("</Attribute>");
 		stringBuilder.append("</Attributes>");
+		
+		
 
 		return stringBuilder.toString();
 	}
