@@ -15,6 +15,6 @@ public class Commons implements ConstantsI{
         return  LocalDateTime.parse(endDate, DateTimeFormatter.ofPattern(dbDateTimeFormat)).isBefore(LocalDateTime.parse(startDate,DateTimeFormatter.ofPattern(dbDateTimeFormat)));
     }
     public static boolean compareDate(String date){
-        return LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern(dbDateTimeFormat))).isAfter(LocalDateTime.parse(date,DateTimeFormatter.ofPattern(dbDateTimeFormat)));
+        return LocalDateTime.now().isAfter(LocalDateTime.parse(date,DateTimeFormatter.ofPattern(dbDateTimeFormat)));
     }
 }
