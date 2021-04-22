@@ -11,6 +11,7 @@ public class Controller implements ConstantsI {
         String connectXml = RequestXml.getConnectCabinetXml(cabinetName,userName,password);
         try {
             String connectOutputXml = Api.executeCall(connectXml);
+            System.out.println("output from connect api:"+connectOutputXml);
             xmlParser.setInputXML(connectOutputXml);
 
             if (success(xmlParser.getValueOf("MainCode")))
@@ -23,8 +24,10 @@ public class Controller implements ConstantsI {
     }
     public String getCreatedWorkItem(String sessionId,String attributes){
         inputXml = RequestXml.getCreateWorkItemXml(cabinetName,sessionId,processDefId,queueId,attributes);
+        System.out.println("input from upload api:"+inputXml);
         try {
             outputXml = Api.executeCall(inputXml);
+            System.out.println("output from upload api:"+outputXml);
             xmlParser.setInputXML(outputXml);
             if(success(xmlParser.getValueOf("MainCode")))
                 return xmlParser.getValueOf("ProcessInstanceId");

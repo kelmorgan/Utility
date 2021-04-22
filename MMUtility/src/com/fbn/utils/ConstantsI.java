@@ -4,7 +4,7 @@ public interface ConstantsI {
 	
 	String appServerIp = "172.16.249.62";
 	String cabinetName = "fbnibpsuatcab";
-	String processDefId = "27";
+	String processDefId = "46";
 	String processName = "";
 
 	String appServerType = "JTS";
@@ -14,7 +14,7 @@ public interface ConstantsI {
 	int wrapperPort = 3333;
 	String userName = "FBNTreasuryUtilityUser";
 	String password = "system12345#";
-	String queueId = "641";
+	String queueId = "1143";
 	String configPath = "";
 	
 
