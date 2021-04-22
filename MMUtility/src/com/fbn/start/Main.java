@@ -1,5 +1,6 @@
 package com.fbn.start;
 
+import com.fbn.api.newgen.CompleteWorkItem;
 import com.fbn.api.newgen.Controller;
 import com.fbn.utils.Commons;
 import com.fbn.utils.ConstantsI;
@@ -10,10 +11,14 @@ import java.util.Set;
 
 public class Main implements ConstantsI {
     private Set<Map<String,String>> resultSet;
+    private final String sessionId;
+
+    public Main() {
+        this.sessionId = new Controller().getSessionId();
+    }
     public void closeMarketWindow(){
         resultSet = new Controller().getRecords(Query.getOpenWindowQuery());
         System.out.println(resultSet);
-        String sessionId = new Controller().getSessionId();
         for (Map<String ,String> result : resultSet){
             String date = result.get("CLOSEDATE");
             System.out.println(date);
@@ -24,8 +29,10 @@ public class Main implements ConstantsI {
             String value = "'"+flag+"'";
             String condition = "refid = '"+id+"'";
 
-            if (Commons.compareDate(date))
-                new Controller().updateRecords(sessionId,Query.setupTblName,Query.stColCloseFlag,value,condition);
+            if (Commons.compareDate(date)) {
+                new Controller().updateRecords(sessionId, Query.setupTblName, Query.stColCloseFlag, value, condition);
+                new CompleteWorkItem(sessionId,wiName,"CLOSEFLAG","Y");
+            }
         }
     }
 }

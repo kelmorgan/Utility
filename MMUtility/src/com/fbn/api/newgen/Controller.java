@@ -79,6 +79,17 @@ public class Controller implements ConstantsI {
             e.printStackTrace();
         }
     }
+    public void setAttribute(String sessionId,String wiName,String attributeName, String value){
+        inputXml = RequestXml.getAssignAttributeXml(cabinetName,sessionId,wiName,attributeName,value);
+        System.out.println("input from setAttribute-- "+ inputXml);
+
+        try {
+            outputXml = Api.executeCall(inputXml);
+            System.out.println("outputXml from setAttribute-- "+ outputXml);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public Set<Map<String,String>> getRecords(String query){
         return new DbConnect(RequestXml.getSelectQueryXml(query,cabinetName)).getData();
     }

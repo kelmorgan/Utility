@@ -149,6 +149,26 @@ public class RequestXml  {
 
 		return stringBuilder.toString();
 	}
+
+	public static String getAssignAttributeXml(String cabinetName,String sessionId,String wiName,String attributeName,String value){
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("<?xml version='1.0'?>");
+		stringBuilder.append("<WMAssignWorkItemAttribute_Input>");
+		stringBuilder.append("<Option>WMAssignWorkItemAttribute</Option>");
+		stringBuilder.append("<EngineName>").append(cabinetName).append("</EngineName>");
+		stringBuilder.append("<SessionId>").append(sessionId).append("</SessionId>");
+		stringBuilder.append("<ProcessInstanceId>").append(wiName).append("</ProcessInstanceId>");
+		stringBuilder.append("<WorkItemId>1</WorkItemId>");
+		stringBuilder.append("<Attributes>");
+		stringBuilder.append("<Attribute>");
+		stringBuilder.append("<Name>").append(attributeName).append("</Name>");
+		stringBuilder.append("<Type></Type>");
+		stringBuilder.append("<Value>").append(value).append("</Value>");
+		stringBuilder.append("</Attribute>");
+		stringBuilder.append("</Attributes>");
+
+		return stringBuilder.toString();
+	}
 	public static String getSelectQueryXml(String query,String cabinetName) {
 		return  "<?xml version=\"1.0\"?>\n"
 				+"<APSelect_Input>\n"
