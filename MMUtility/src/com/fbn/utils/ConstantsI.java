@@ -5,8 +5,6 @@ public interface ConstantsI {
 	String appServerIp = "172.16.249.62";
 	String cabinetName = "fbnibpsuatcab";
 	String processDefId = "46";
-	String processName = "";
-
 	String appServerType = "JTS";
 	//String AppServerType = "WebSphere";
 	String appServerPort = "2809";
@@ -16,6 +14,7 @@ public interface ConstantsI {
 	String password = "system12345#";
 	String queueId = "1143";
 	String configPath = "";
+	String wiName = "FBN-0000000000-MMW";
 	
 
 

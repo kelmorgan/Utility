@@ -85,7 +85,7 @@ public class RequestXml  {
 		return stringBuilder.toString();
 	}
 
-	public static String getGetWorkItemInputXml(String cabinetName, String sessionId, String processInstanceId) {
+	public static String getLockWorkItemInputXml(String cabinetName, String sessionId, String processInstanceId) {
 		return  "<?xml version=\"1.0\" ?>\n"
 				+ "<WMGetWorkItem_Input>\n"
 				+ "<Option>WMGetWorkItem</Option>\n"
@@ -107,7 +107,7 @@ public class RequestXml  {
 				+"<Admin>Y</Admin>"
 				+ "</WMUnlockWorkItem_Input>";
 	}
-	public String getCompleteWorkItemXml(String cabinetName,
+	public static String getCompleteWorkItemXml(String cabinetName,
 										   String sessionId, String processInstanceId) {
 		return "<?xml version=\"1.0\"?>\n"
 				+ "<WMCompleteWorkItem_Input>\n"

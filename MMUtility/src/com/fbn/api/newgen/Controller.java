@@ -37,9 +37,44 @@ public class Controller implements ConstantsI {
         return null;
     }
     
-    public void completeWorkItem () {
-    	
+    public void completeWorkItem (String sessionId, String wiName) {
+        inputXml = RequestXml.getCompleteWorkItemXml(cabinetName,sessionId,wiName);
+        System.out.println("input from completeworkitem-- "+inputXml);
+
+        try {
+            outputXml = Api.executeCall(inputXml);
+            System.out.println("outputXml from completeworkitem-- "+outputXml);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    public void lockWorkItem(String sessionId,String wiName){
+        inputXml = RequestXml.getLockWorkItemInputXml(cabinetName,sessionId,wiName);
+
+        System.out.println("input from lock workitem-- "+inputXml);
+
+        try {
+            outputXml = Api.executeCall(inputXml);
+            System.out.println("outputXml from lock workitem-- "+outputXml);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void unlockWorkItem (String sessionId,String wiName){
+        inputXml = RequestXml.getUnlockWorkItemXml(cabinetName,sessionId,wiName);
+        System.out.println("input from unlock workitem-- "+inputXml);
+
+        try {
+            outputXml = Api.executeCall(inputXml);
+            System.out.println("outputXml from unlock workitem-- "+outputXml);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private boolean success(String response){
         return response.equalsIgnoreCase("0");
     }
