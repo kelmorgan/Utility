@@ -438,7 +438,7 @@ public class XmlParser {
      * @param xmlInput
      * @return
      */
-    public static Set<Map<String, String>> getXMLData(String xmlInput, String tag) {
+    public  Set<Map<String, String>> getXMLData(String xmlInput, String tag) {
 
         Document doc = null;
         DocumentBuilder documentbuilder;
@@ -480,7 +480,7 @@ public class XmlParser {
      * @param tagname name of tag for which value is required.
      * @param elt Element of root type
      */
-    public static String getTagValues(String tagname, Element elt) {
+    public String getTagValues(String tagname, Element elt) {
         NodeList nlList = elt.getElementsByTagName(tagname);
         if (nlList != null && nlList.getLength() > 0) {
             NodeList subList = nlList.item(0).getChildNodes();
