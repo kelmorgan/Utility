@@ -14,7 +14,7 @@ public interface ConstantsI {
 	String password = "system12345#";
 	String queueId = "1143";
 	String configPath = "";
-	String wiName = "FBN-0000000000-MMW";
+	String wiName = "FBN-00000000000132-MMW";
 	
 
 

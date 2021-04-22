@@ -93,6 +93,7 @@ public class RequestXml  {
 				+ "<SessionId>"+ sessionId + "</SessionId>\n"
 				+ "<ProcessInstanceId>"+ processInstanceId + "</ProcessInstanceId>\n"
 				+ "<WorkItemId>1</WorkItemId>\n"
+				+"<Admin>Y</Admin>"
 				+ "</WMGetWorkItem_Input>";
 	}
 

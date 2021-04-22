@@ -10,8 +10,12 @@ public class startUtility implements ConstantsI{
 	
 	  public static void main(String[] args) {
 	  	 // String attribute = "<CP_UTILITYFLAG>Y</CP_UTILITYFLAG>";
-		new Controller().completeWorkItem(new Controller().getSessionId(),wiName);
-		//new Controller().unlockWorkItem(new Controller().getSessionId(),wiName);
-		//new Controller().lockWorkItem(new Controller().getSessionId(),wiName);
+		  String sessionId = new Controller().getSessionId();
+		  
+		new Controller().unlockWorkItem(sessionId,wiName);
+		new Controller().lockWorkItem(sessionId,wiName);
+		new Controller().completeWorkItem(sessionId,wiName);
+		
+	
 	  }
 }
