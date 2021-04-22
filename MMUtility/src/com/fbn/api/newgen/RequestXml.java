@@ -14,8 +14,28 @@ import ISPack.ISUtil.JPDBRecoverDocData;
 import ISPack.ISUtil.JPISException;
 import ISPack.ISUtil.JPISIsIndex;
 
-public class RequestXml {
-	
+public class RequestXml  {
+
+	public static String connectCabinetXml(String cabinetName,String userName,String password){
+		StringBuilder stringBuilder = new StringBuilder();
+
+		stringBuilder.append("<?xml version=1.0?>");
+		stringBuilder.append("<WMConnect_input>");
+		stringBuilder.append("<Option>WMConnect</Option>");
+		stringBuilder.append("<EngineName>").append(cabinetName).append("</EngineName>");
+		stringBuilder.append("<ApplicationInfo>127.0.0.1</ApplicationInfo>");
+		stringBuilder.append("<Participant>");
+		stringBuilder.append("<Name>").append(userName).append("</Name>");
+		stringBuilder.append("<Password>").append(password).append("</Password>");
+		stringBuilder.append("<Scope></Scope>");
+		stringBuilder.append("<UserExist>Y</UserExist>");
+		stringBuilder.append("<ParticipantType>U</ParticipantType>");
+		stringBuilder.append("</Participant>");
+		stringBuilder.append("<WMConnect_input>");
+
+		return stringBuilder.toString();
+
+	}
     public static String connectCabinetXML(String strCabinetName, String strUserName, String strPassword){
             StringBuffer strBuffer = null;
         
@@ -63,14 +83,14 @@ public class RequestXml {
             String attribute,
 			   String Documentsfields) 
 {
-return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem</Option>\n"
-+ "<EngineName>"+cabinetName+"</EngineName>\n"
-+ "<SessionId>"+sessionID+"</SessionId>\n"
-+ "<ProcessDefId>"+processDefID+"</ProcessDefId>\n"
-+ "<InitiateFromActivityId>"+processActivityID+"</InitiateFromActivityId>\n"
-+ "<Attributes>"+attribute+"</Attributes>\n"
-+"<Documents>"+Documentsfields+"</Documents>\n"			
-+ "</WFUploadWorkItem_Input>";
+		return "<?xml version=\"1.0\"?><WFUploadWorkItem_Input><Option>WFUploadWorkItem</Option>\n"
+		+ "<EngineName>"+cabinetName+"</EngineName>\n"
+		+ "<SessionId>"+sessionID+"</SessionId>\n"
+		+ "<ProcessDefId>"+processDefID+"</ProcessDefId>\n"
+		+ "<InitiateFromActivityId>"+processActivityID+"</InitiateFromActivityId>\n"
+	 	+ "<Attributes>"+attribute+"</Attributes>\n"
+		+"<Documents>"+Documentsfields+"</Documents>\n"
+		+ "</WFUploadWorkItem_Input>";
 }
 	
 	
