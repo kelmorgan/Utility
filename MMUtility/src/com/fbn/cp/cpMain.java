@@ -1,5 +1,5 @@
 package com.fbn.cp;
 
-public class Main {
+public class cpMain {
 
 }
