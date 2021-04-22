@@ -9,7 +9,8 @@ import com.fbn.utils.Query;
 public class startUtility implements ConstantsI{
 	
 	  public static void main(String[] args) {
-		  System.out.println(new DbConnect(RequestXml.getSelectQueryXml(Query.getSetupTblQuery(),cabinetName)).getData());
+	  	  String attribute = "<cp_utilityFlag>Y</cp_utilityFlag>";
+		  System.out.println(new Controller().getCreatedWorkItem(new Controller().getSessionId(),attribute));
 
 	  }
 }
