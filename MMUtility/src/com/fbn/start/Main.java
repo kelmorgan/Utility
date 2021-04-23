@@ -2,7 +2,6 @@ package com.fbn.start;
 
 import com.fbn.api.newgen.CompleteWorkItem;
 import com.fbn.api.newgen.Controller;
-import com.fbn.cp.cpMain;
 import com.fbn.utils.Commons;
 import com.fbn.utils.ConstantsI;
 import com.fbn.utils.Query;
@@ -18,7 +17,7 @@ public class Main extends Thread implements ConstantsI {
         this.sessionId = new Controller().getSessionId();
    }
     private void closeMarketWindow(){
-        resultSet = new Controller().getRecords(Query.getOpenWindowQuery());
+        resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery());
         System.out.println(resultSet);
         for (Map<String ,String> result : resultSet){
             String date = result.get("CLOSEDATE");

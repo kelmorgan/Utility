@@ -12,8 +12,8 @@ public class Query {
 	public static String getSetupTblQuery() {
         return  "select * from mm_setup_tbl";
     }
-	public static String getOpenWindowQuery() {
-        return  "select closedate , winame,refid from mm_setup_tbl where closeflag = 'N'";
+	public static String getCpOpenWindowQuery() {
+        return  "select closedate , winame,refid from mm_setup_tbl where process = 'Commercial Paper' and closeflag = 'N'";
     }
     public static String getBidTblQuery() {
         return  "select * from mm_bid_tbl";
