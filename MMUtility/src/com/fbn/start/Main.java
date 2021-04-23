@@ -10,14 +10,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class Main extends Thread implements ConstantsI {
-    private Set<Map<String,String>> resultSet;
     private final String sessionId;
 
     public Main() {
         this.sessionId = new Controller().getSessionId();
    }
     private void closeMarketWindow(){
-        resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery());
+        Set<Map<String, String>> resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery());
         System.out.println(resultSet);
         for (Map<String ,String> result : resultSet){
             String date = result.get("CLOSEDATE");

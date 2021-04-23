@@ -27,8 +27,8 @@ public class Controller implements ConstantsI {
         }
         return null;
     }
-    public String getCreatedWorkItem(String sessionId,String attributes){
-        inputXml = RequestXml.getCreateWorkItemXml(cabinetName,sessionId,processDefId,queueId,attributes);
+    public String getCreatedWorkItem(String sessionId,String attributes,String initiateFlag){
+        inputXml = RequestXml.getCreateWorkItemXml(cabinetName,sessionId,processDefId,queueId,attributes,initiateFlag);
         System.out.println("input from upload api:"+inputXml);
         try {
             outputXml = Api.executeCall(inputXml);

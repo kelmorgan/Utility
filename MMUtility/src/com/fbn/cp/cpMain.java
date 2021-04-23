@@ -1,14 +1,20 @@
 package com.fbn.cp;
 
+import java.util.Map;
+import java.util.Set;
+
 public class cpMain implements Runnable {
       public cpMain(String sessionId) {
        this.sessionId = sessionId;
     }
 
-    private  String sessionId;
+    private final String sessionId;
+    private Set<Map<String,String>> resultSet;
 
     @Override
     public void run() {
-        System.out.println("cpMain running");
+        new PrimaryMarket(sessionId).run();
+        //new SecondaryMarket(sessionId).run();
     }
+
 }

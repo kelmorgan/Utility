@@ -65,7 +65,7 @@ public class RequestXml  {
 		return stringBuilder.toString();
 	}
 	
-	public  static String getCreateWorkItemXml(String cabinetName, String sessionId, String processDefId,String queueId,String attributes){
+	public  static String getCreateWorkItemXml(String cabinetName, String sessionId, String processDefId,String queueId,String attributes,String initiateFlag){
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("<?xml version=1.0?>");
 		stringBuilder.append("<WFUploadWorkItem_Input>");
@@ -77,7 +77,7 @@ public class RequestXml  {
 		stringBuilder.append("<DataDefName></DataDefName>");
 		stringBuilder.append("<UserDefVarFlag>Y</UserDefVarFlag>");
 		stringBuilder.append("<Fields></Fields>");
-		stringBuilder.append("<InitiateAlso>Y</InitiateAlso>");
+		stringBuilder.append("<InitiateAlso>").append(initiateFlag).append("</InitiateAlso>");
 		stringBuilder.append("<InitiateFromActivityId/>");
 		stringBuilder.append("<Attributes>").append(attributes).append("</Attributes>");
 		stringBuilder.append("<Documents></Documents>");

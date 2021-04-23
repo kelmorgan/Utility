@@ -1,5 +1,6 @@
 package com.fbn.utils;
 
+
 public interface ConstantsI {
 	
 	String appServerIp = "172.16.249.62";
@@ -17,6 +18,8 @@ public interface ConstantsI {
 	String wiName = "FBN-00000000000134-MMW";
 	String dbDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 	String flag = "Y";
+	String initiateFlagYes = "Y";
+	String initiateFlagNo = "N";
 
 
 }

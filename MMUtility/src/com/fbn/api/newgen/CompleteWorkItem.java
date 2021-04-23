@@ -4,10 +4,11 @@ public class CompleteWorkItem  {
     private final String wiName;
     private String attribute;
     private String value;
-    private String sessionId;
+    private final String sessionId;
 
 
-    public CompleteWorkItem(String wiName) {
+    public CompleteWorkItem(String sessionId, String  wiName) {
+        this.sessionId = sessionId;
         this.wiName = wiName;
         completeWorkItem();
     }
@@ -21,7 +22,6 @@ public class CompleteWorkItem  {
     }
 
     private  void completeWorkItem(){
-        String sessionId = new Controller().getSessionId();
         new Controller().unlockWorkItem(sessionId,wiName);
         new Controller().lockWorkItem(sessionId,wiName);
         new Controller().completeWorkItem(sessionId,wiName);

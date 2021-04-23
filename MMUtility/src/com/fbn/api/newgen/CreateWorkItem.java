@@ -1,7 +1,18 @@
 package com.fbn.api.newgen;
 
 public class CreateWorkItem {
-    public static String createWorkItem(String attributes){
-        return new Controller().getCreatedWorkItem(new Controller().getSessionId(),attributes);
+
+    private final String sessionId;
+    private final String initiateFlag;
+    private final String attributes;
+
+    public CreateWorkItem(String sessionId,String attributes, String initiateFlag) {
+        this.sessionId = sessionId;
+        this.attributes = attributes;
+        this.initiateFlag = initiateFlag;
+    }
+
+    public  String createWorkItem(){
+        return new Controller().getCreatedWorkItem(sessionId,attributes,initiateFlag);
     }
 }

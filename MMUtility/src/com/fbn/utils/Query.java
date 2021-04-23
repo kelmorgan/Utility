@@ -18,4 +18,7 @@ public class Query {
     public static String getBidTblQuery() {
         return  "select * from mm_bid_tbl";
     }
+    public static String getCpPmBidsToProcessQuery () {
+        return "select custrefid, tenor, rate, ratetype from mm_bid_tbl where process = 'Commercial Paper' and markettype= 'primary' and processflag ='N' and groupindexflag = 'N'";
+    }
 }

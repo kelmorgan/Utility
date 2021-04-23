@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class DbConnect implements ConstantsI{
-	private String queryXml;
+	private final String queryXml;
 	private String outputXml;
-	private XmlParser xmlParser = new XmlParser();
+	private final XmlParser xmlParser = new XmlParser();
 	public DbConnect(String queryXml){
 		this.queryXml = queryXml;
 	}
