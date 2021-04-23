@@ -1,14 +1,17 @@
 package com.fbn.api.newgen;
 
 public class CompleteWorkItem  {
-    private String wiName;
+    private final String wiName;
     private String attribute;
     private String value;
     private String sessionId;
+
+
     public CompleteWorkItem(String wiName) {
         this.wiName = wiName;
         completeWorkItem();
     }
+
     public CompleteWorkItem(String sessionId,String wiName, String attribute,String value){
         this.wiName = wiName;
         this.attribute = attribute;
@@ -24,9 +27,12 @@ public class CompleteWorkItem  {
         new Controller().completeWorkItem(sessionId,wiName);
     }
     private  void completeWorkItemWithAttribute(){
+        String condition = "winame = '"+wiName+"'";
+        String tableName = "moneyMarket_ext";
+        String value = "'"+this.value+"'";
         new Controller().unlockWorkItem(sessionId,wiName);
         new Controller().lockWorkItem(sessionId,wiName);
-        new Controller().setAttribute(sessionId,wiName,attribute,value);
+        new Controller().updateRecords(sessionId, tableName,attribute,value,condition);
         new Controller().completeWorkItem(sessionId,wiName);
     }
 }
