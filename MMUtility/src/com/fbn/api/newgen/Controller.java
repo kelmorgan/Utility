@@ -95,7 +95,7 @@ public class Controller implements ConstantsI {
         System.out.println("input from disconnect cabinet-- "+inputXml);
         try {
             outputXml = Api.executeCall(inputXml);
-            System.out.println("input from disconnect cabinet-- "+outputXml);
+            System.out.println("outputXml from disconnect cabinet-- "+outputXml);
         } catch (Exception e) {
             e.printStackTrace();
         }
