@@ -27,7 +27,7 @@ public class CompleteWorkItem  {
         new Controller().completeWorkItem(sessionId,wiName);
     }
     private  void completeWorkItemWithAttribute(){
-        String condition = "winame = '"+wiName+"'";
+        String condition = "wiName = '"+wiName+"'";
         String tableName = "moneyMarket_ext";
         String value = "'"+this.value+"'";
         new Controller().unlockWorkItem(sessionId,wiName);
