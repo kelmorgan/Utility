@@ -2,6 +2,7 @@ package com.fbn.start;
 
 import com.fbn.api.newgen.CompleteWorkItem;
 import com.fbn.api.newgen.Controller;
+import com.fbn.cp.cpMain;
 import com.fbn.utils.Commons;
 import com.fbn.utils.ConstantsI;
 import com.fbn.utils.Query;
@@ -9,14 +10,14 @@ import com.fbn.utils.Query;
 import java.util.Map;
 import java.util.Set;
 
-public class Main implements ConstantsI {
+public class Main extends Thread implements ConstantsI {
     private Set<Map<String,String>> resultSet;
     private final String sessionId;
 
     public Main() {
         this.sessionId = new Controller().getSessionId();
-    }
-    public void closeMarketWindow(){
+   }
+    private void closeMarketWindow(){
         resultSet = new Controller().getRecords(Query.getOpenWindowQuery());
         System.out.println(resultSet);
         for (Map<String ,String> result : resultSet){
@@ -34,5 +35,14 @@ public class Main implements ConstantsI {
                 new CompleteWorkItem(sessionId,wiName,"CLOSEFLAG","Y");
             }
         }
+    }
+    private void disconnectSession (){
+        new Controller().disconnectSession(sessionId);
+    }
+
+    public void run() {
+        closeMarketWindow();
+        disconnectSession();
+       // new cpMain().run();
     }
 }

@@ -5,6 +5,6 @@ package com.fbn.start;
 public class startUtility {
 	
 	  public static void main(String[] args) {
-	  	new Main().closeMarketWindow();
+	  	new Main().start();
 	  }
 }

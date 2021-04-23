@@ -90,6 +90,16 @@ public class Controller implements ConstantsI {
             e.printStackTrace();
         }
     }
+    public void disconnectSession (String sessionId){
+        inputXml = RequestXml.getDisconnectCabinetXml(cabinetName,sessionId);
+        System.out.println("input from disconnect cabinet-- "+inputXml);
+        try {
+            outputXml = Api.executeCall(inputXml);
+            System.out.println("input from disconnect cabinet-- "+outputXml);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public Set<Map<String,String>> getRecords(String query){
         return new DbConnect(RequestXml.getSelectQueryXml(query,cabinetName)).getData();
     }
