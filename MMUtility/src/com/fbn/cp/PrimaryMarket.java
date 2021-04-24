@@ -4,7 +4,6 @@ import com.fbn.api.newgen.CompleteWorkItem;
 import com.fbn.api.newgen.Controller;
 import com.fbn.utils.ConstantsI;
 import com.fbn.utils.Query;
-
 import java.util.Map;
 import java.util.Set;
 
@@ -21,6 +20,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     public void run() {
         processPrimaryBids();
         processFailedBids();
+        processSuccessfulBids();
     }
 
     private void  processPrimaryBids(){
@@ -60,46 +60,46 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     // Added by Amula
     private void processFailedBids() {
     	String columns = "POSTINTEGRATIONFLAG, REVERSALFLAG";
-    	String wiName = "";
+    	String wiName = empty;
     	String attribute = "FAILEDBID";
-    	resultSet = new Controller().getRecords(Query.getAllocatedBids("Y"));
+    	resultSet = new Controller().getRecords(Query.getCpAllocatedPrimaryBids("Y"));
     	for (Map<String,String> result : resultSet){
              String id = result.get(bidCustIdCol.toUpperCase());
              wiName = result.get(bidWinameCol.toUpperCase());
              String custSol = result.get(bidCustSolCol.toUpperCase());
              String custPrincipal = result.get(bidCustPrincipalCol.toUpperCase());
              String branchSol = result.get(bidBranchSolCol.toUpperCase());
-             
+
              
            //perform reversal
             
              String values = "'Y', 'Y'";
              String condition = "CUSTREFID = '"+id+"'";
              new Controller().updateRecords(sessionId,Query.bidTblName,columns,values,condition);
+            new CompleteWorkItem(sessionId,wiName,attribute,flag);
         }
-    	new CompleteWorkItem(sessionId,wiName,attribute,flag);
     }
     
-    private void processSucessfulBids() {
+    private void processSuccessfulBids() {
     	String column = "POSTINTEGRATIONFLAG";
     	String wiName = "";
     	String attribute = "SUCCESSBID";
-    	resultSet = new Controller().getRecords(Query.getAllocatedBids("N"));
+    	resultSet = new Controller().getRecords(Query.getCpAllocatedPrimaryBids("N"));
     	for (Map<String,String> result : resultSet){
             String id = result.get(bidCustIdCol.toUpperCase());
             wiName = result.get(bidWinameCol.toUpperCase());
             String custSol = result.get(bidCustSolCol.toUpperCase());
             String custPrincipal = result.get(bidCustPrincipalCol.toUpperCase());
             String branchSol = result.get(bidBranchSolCol.toUpperCase());
-            
+            String allocationPercentage = result.get(bidAllocationPercentageCol.toUpperCase());
+
             //credit the principal and debit customer principal based on allocation percentage
             
             String value = "'Y'";
             String condition = "CUSTREFID = '"+id+"'";
             new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
-    	
+            new CompleteWorkItem(sessionId,wiName,attribute,flag);
     	}
-    	new CompleteWorkItem(sessionId,wiName,attribute,flag);
     }
 
 }

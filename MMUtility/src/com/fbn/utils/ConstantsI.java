@@ -20,6 +20,7 @@ public interface ConstantsI {
 	String bidMarketTypeCol = "MARKETTYPE";
 	String bidAllocatedFlagCol = "ALLOCATEDFLAG";
 	String bidWinameCol = "BIDWINAME";
+	String bidAllocationPercentageCol = "allocationpercentage";
 	
 	//CONFIG PROPERTIES
 	String appServerIp = "172.16.249.62";

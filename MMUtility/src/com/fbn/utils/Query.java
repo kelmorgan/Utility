@@ -7,8 +7,6 @@ public class Query {
     public static String investmentTblName = "mm_sminvestments_tbl";
     public static String stColId = "refid";
     public static String stColCloseFlag = "closeflag";
-
-
 	public static String getSetupTblQuery() {
         return  "select * from mm_setup_tbl";
     }
@@ -21,8 +19,7 @@ public class Query {
     public static String getCpPmBidsToProcessQuery () {
         return "select custrefid, tenor, rate, ratetype from mm_bid_tbl where process = 'Commercial Paper' and markettype= 'primary' and processflag ='N' and groupindexflag = 'N'";
     }
-    
-    public static String getAllocatedBids(String flag) {
-    	return "select custrefid, bidwiname, custsol,custacctno, custprincipal, branchsol from mm_bid_tbl where failedflag = '"+flag+"' and process = 'Commercial Paper' and markettype = 'primary' and allocatedflag ='Y'";
+    public static String getCpAllocatedPrimaryBids(String flag) {
+    	return "select custrefid, bidwiname, custsol,custacctno, custprincipal, branchsol,allocationpercentage from mm_bid_tbl where failedflag = '"+flag+"' and process = 'Commercial Paper' and markettype = 'primary' and allocatedflag ='Y'";
     }
 }

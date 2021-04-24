@@ -8,10 +8,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class Controller implements ConstantsI {
-    XmlParser xmlParser = new XmlParser();
+    private final XmlParser xmlParser = new XmlParser();
     private String inputXml;
     private String outputXml;
-
     public String getSessionId(){
         String connectXml = RequestXml.getConnectCabinetXml(cabinetName,userName,password);
         try {
@@ -41,7 +40,6 @@ public class Controller implements ConstantsI {
         }
         return null;
     }
-    
     public void completeWorkItem (String sessionId, String wiName) {
         inputXml = RequestXml.getCompleteWorkItemXml(cabinetName,sessionId,wiName);
         System.out.println("input from completeworkitem-- "+inputXml);
@@ -53,7 +51,6 @@ public class Controller implements ConstantsI {
             e.printStackTrace();
         }
     }
-
     public void lockWorkItem(String sessionId,String wiName){
         inputXml = RequestXml.getLockWorkItemInputXml(cabinetName,sessionId,wiName);
 
@@ -66,7 +63,6 @@ public class Controller implements ConstantsI {
             e.printStackTrace();
         }
     }
-
     public void unlockWorkItem (String sessionId,String wiName){
         inputXml = RequestXml.getUnlockWorkItemXml(cabinetName,sessionId,wiName);
         System.out.println("input from unlock workitem-- "+inputXml);
@@ -112,7 +108,6 @@ public class Controller implements ConstantsI {
     public int deleteRecords(String sessionId,String tableName,String condition){
         return new DbConnect(RequestXml.getDeleteQueryXml(cabinetName,sessionId,tableName,condition)).saveData();
     }
-
     private boolean success(String response){
         return response.equalsIgnoreCase("0");
     }
