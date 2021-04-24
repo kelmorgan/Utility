@@ -21,4 +21,8 @@ public class Query {
     public static String getCpPmBidsToProcessQuery () {
         return "select custrefid, tenor, rate, ratetype from mm_bid_tbl where process = 'Commercial Paper' and markettype= 'primary' and processflag ='N' and groupindexflag = 'N'";
     }
+    
+    public static String getAllocatedBids(String flag) {
+    	return "select custrefid, bidwiname, custsol,custacctno, custprincipal, branchsol from mm_bid_tbl where failedflag = '"+flag+"' and process = 'Commercial Paper' and markettype = 'primary' and allocatedflag ='Y'";
+    }
 }

@@ -1,19 +1,4 @@
 package com.fbn.api.newgen;
-
-import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Set;
-
-import com.newgen.wfdesktop.xmlapi.WFInputXml;
-
-import ISPack.CPISDocumentTxn;
-import ISPack.ISUtil.JPDBRecoverDocData;
-import ISPack.ISUtil.JPISException;
-import ISPack.ISUtil.JPISIsIndex;
-
 public class RequestXml  {
 
 	public static String getConnectCabinetXml(String cabinetName, String userName, String password){

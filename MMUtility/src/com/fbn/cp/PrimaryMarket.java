@@ -19,10 +19,11 @@ public class PrimaryMarket implements Runnable,ConstantsI {
 
     @Override
     public void run() {
-        processCpPrimaryBids();
+        processPrimaryBids();
+        processFailedBids();
     }
 
-    private void  processCpPrimaryBids(){
+    private void  processPrimaryBids(){
         String attributes = "<CP_UTILITYFLAG>Y</CP_UTILITYFLAG>";
         String wiName = new Controller().getCreatedWorkItem(sessionId,attributes,initiateFlagNo);
         resultSet = new Controller().getRecords(Query.getCpPmBidsToProcessQuery());
@@ -54,6 +55,51 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     private boolean isPRate(String rateType){
         String pRateType = "Personal";
         return rateType.equalsIgnoreCase(pRateType);
+    }
+    
+    // Added by Amula
+    private void processFailedBids() {
+    	String columns = "POSTINTEGRATIONFLAG, REVERSALFLAG";
+    	String wiName = "";
+    	String attribute = "FAILEDBID";
+    	resultSet = new Controller().getRecords(Query.getAllocatedBids("Y"));
+    	for (Map<String,String> result : resultSet){
+             String id = result.get(bidCustIdCol.toUpperCase());
+             wiName = result.get(bidWinameCol.toUpperCase());
+             String custSol = result.get(bidCustSolCol.toUpperCase());
+             String custPrincipal = result.get(bidCustPrincipalCol.toUpperCase());
+             String branchSol = result.get(bidBranchSolCol.toUpperCase());
+             
+             
+           //perform reversal
+            
+             String values = "'Y', 'Y'";
+             String condition = "CUSTREFID = '"+id+"'";
+             new Controller().updateRecords(sessionId,Query.bidTblName,columns,values,condition);
+        }
+    	new CompleteWorkItem(sessionId,wiName,attribute,flag);
+    }
+    
+    private void processSucessfulBids() {
+    	String column = "POSTINTEGRATIONFLAG";
+    	String wiName = "";
+    	String attribute = "SUCCESSBID";
+    	resultSet = new Controller().getRecords(Query.getAllocatedBids("N"));
+    	for (Map<String,String> result : resultSet){
+            String id = result.get(bidCustIdCol.toUpperCase());
+            wiName = result.get(bidWinameCol.toUpperCase());
+            String custSol = result.get(bidCustSolCol.toUpperCase());
+            String custPrincipal = result.get(bidCustPrincipalCol.toUpperCase());
+            String branchSol = result.get(bidBranchSolCol.toUpperCase());
+            
+            //credit the principal and debit customer principal based on allocation percentage
+            
+            String value = "'Y'";
+            String condition = "CUSTREFID = '"+id+"'";
+            new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
+    	
+    	}
+    	new CompleteWorkItem(sessionId,wiName,attribute,flag);
     }
 
 }
