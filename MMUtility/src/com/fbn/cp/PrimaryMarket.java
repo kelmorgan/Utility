@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class PrimaryMarket implements Runnable,ConstantsI {
     private Set<Map<String,String>> resultSet;
-    private String creationattribute = "<CP_UTILITYFLAG>Y</CP_UTILITYFLAG>";
+
     boolean postingIsSucessful = true; //for structure purpose
 
     public PrimaryMarket(String sessionId) {
@@ -22,13 +22,14 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     public void run() {
         processPrimaryBids();
         processFailedBids();
-        processPostingFailureFailedBids(creationattribute);
+        processPostingFailureFailedBids();
         processSuccessfulBids();
-        processPostingFailureSuccessBids(creationattribute);
+        processPostingFailureSuccessBids();
     }
 
     private void  processPrimaryBids(){
-        String wiName = new Controller().getCreatedWorkItem(sessionId,creationattribute,initiateFlagNo);
+        String attribute = "<CP_UTILITYFLAG>Y</CP_UTILITYFLAG>";
+        String wiName = new Controller().getCreatedWorkItem(sessionId,attribute,initiateFlagNo);
         resultSet = new Controller().getRecords(Query.getCpPmBidsToProcessQuery());
         String columns = "utilitywiname,groupindex,groupindexflag,processflag";
         for (Map<String,String >result : resultSet){
@@ -90,9 +91,9 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     }
     
     
-    private void processPostingFailureFailedBids(String creationattribute) {
-    	String attribute = "FAILEDBID";
-    	String wiName = new Controller().getCreatedWorkItem(sessionId,creationattribute,initiateFlagNo);
+    private void processPostingFailureFailedBids() {
+    	String attribute = "<CP_UTILITYFLAG>F</CP_UTILITYFLAG>";
+    	String wiName = new Controller().getCreatedWorkItem(sessionId,attribute,initiateFlagNo);
     	String column = "FAILEDTRANUTILITYWINAME";
     	String value = "'"+wiName+"'";
     	
@@ -103,7 +104,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
         	new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
         }
  
-    	new CompleteWorkItem(sessionId,wiName,attribute,"F"); 	
+    	new CompleteWorkItem(sessionId,wiName);
     }
     
     private void processSuccessfulBids() {
@@ -135,9 +136,9 @@ public class PrimaryMarket implements Runnable,ConstantsI {
          } 
     }
     
-    private void processPostingFailureSuccessBids(String creationattribute) {
-    	String attribute = "SUCCESSBID";
-    	String wiName = new Controller().getCreatedWorkItem(sessionId,creationattribute,initiateFlagNo);
+    private void processPostingFailureSuccessBids() {
+    	String attribute = "<CP_UTILITYFLAG>S</CP_UTILITYFLAG>";
+    	String wiName = new Controller().getCreatedWorkItem(sessionId,attribute,initiateFlagNo);
     	String column = "FAILEDTRANUTILITYWINAME";
     	String value = "'"+wiName+"'";
     	
@@ -147,7 +148,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
         	String condition = "CUSTREFID = '"+id+"'";
         	new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
     	}
-    	new CompleteWorkItem(sessionId,wiName,attribute,"S");   	
+    	new CompleteWorkItem(sessionId,wiName);
     }
 
 }

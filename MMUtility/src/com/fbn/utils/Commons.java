@@ -17,7 +17,11 @@ public class Commons implements ConstantsI{
     public static boolean compareDate(String date){
         return LocalDateTime.now().isAfter(LocalDateTime.parse(date,DateTimeFormatter.ofPattern(dbDateTimeFormat)));       
     }
-    public static boolean isEmpty(String data){
-    	return data.equalsIgnoreCase(null) || data.equalsIgnoreCase("");
+    public static boolean isMatured(String date){
+        return LocalDate.now().isEqual(LocalDate.parse(date)) || LocalDate.now().isAfter(LocalDate.parse(date));
     }
+    public static boolean isEmpty(String data){
+    	return data.equalsIgnoreCase("");
+    }
+
 }
