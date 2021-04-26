@@ -22,4 +22,11 @@ public class Query {
     public static String getCpAllocatedPrimaryBids(String flag) {
     	return "select custrefid, bidwiname, custsol,custacctno, custprincipal, branchsol,allocationpercentage from mm_bid_tbl where failedflag = '"+flag+"' and process = 'Commercial Paper' and markettype = 'primary' and allocatedflag ='Y'";
     }
+    public static String getProcessPostingFailureFailedBids(String flag) {
+    	return "select custrefid from mm_bid_tbl where failedflag = '"+flag+"' and process = 'Commercial Paper' and markettype = 'primary' and allocatedflag ='Y' and postintegrationflag = 'Y' and failedpostflag = 'Y'";	
+    }
+    public static String getProcessPostingFailureSuccessBids(String flag) {
+    	return "select custrefid from mm_bid_tbl where failedflag = '"+flag+"' and process = 'Commercial Paper' and markettype = 'primary' and allocatedflag ='Y' and postintegrationflag = 'Y' and (failedpostflag = 'C' or failedpostflag = 'D')";	  	
+    } 
+   
 }

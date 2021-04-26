@@ -9,6 +9,8 @@ import java.util.Set;
 
 public class PrimaryMarket implements Runnable,ConstantsI {
     private Set<Map<String,String>> resultSet;
+    private String creationattribute = "<CP_UTILITYFLAG>Y</CP_UTILITYFLAG>";
+    boolean postingIsSucessful = true; //for structure purpose
 
     public PrimaryMarket(String sessionId) {
         this.sessionId = sessionId;
@@ -20,12 +22,13 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     public void run() {
         processPrimaryBids();
         processFailedBids();
+        processPostingFailureFailedBids(creationattribute);
         processSuccessfulBids();
+        processPostingFailureSuccessBids(creationattribute);
     }
 
     private void  processPrimaryBids(){
-        String attributes = "<CP_UTILITYFLAG>Y</CP_UTILITYFLAG>";
-        String wiName = new Controller().getCreatedWorkItem(sessionId,attributes,initiateFlagNo);
+        String wiName = new Controller().getCreatedWorkItem(sessionId,creationattribute,initiateFlagNo);
         resultSet = new Controller().getRecords(Query.getCpPmBidsToProcessQuery());
         String columns = "utilitywiname,groupindex,groupindexflag,processflag";
         for (Map<String,String >result : resultSet){
@@ -57,9 +60,9 @@ public class PrimaryMarket implements Runnable,ConstantsI {
         return rateType.equalsIgnoreCase(pRateType);
     }
     
-    // Added by Amula
     private void processFailedBids() {
-    	String columns = "POSTINTEGRATIONFLAG, REVERSALFLAG";
+    	String columnsS = "POSTINTEGRATIONFLAG, REVERSALFLAG";
+    	String columnsF = "POSTINTEGRATIONFLAG, FAILEDPOSTFLAG";
     	String wiName = empty;
     	String attribute = "FAILEDBID";
     	resultSet = new Controller().getRecords(Query.getCpAllocatedPrimaryBids("Y"));
@@ -70,18 +73,42 @@ public class PrimaryMarket implements Runnable,ConstantsI {
              String custPrincipal = result.get(bidCustPrincipalCol.toUpperCase());
              String branchSol = result.get(bidBranchSolCol.toUpperCase());
 
-             
-           //perform reversal
-            
+             //perform reversal
+             if (postingIsSucessful) {  
              String values = "'Y', 'Y'";
              String condition = "CUSTREFID = '"+id+"'";
-             new Controller().updateRecords(sessionId,Query.bidTblName,columns,values,condition);
-            new CompleteWorkItem(sessionId,wiName,attribute,flag);
+             new Controller().updateRecords(sessionId,Query.bidTblName,columnsS,values,condition);
+             new CompleteWorkItem(sessionId,wiName,attribute,flag);
+             
+             }
+             else {
+            	 String values = "'Y', 'Y'";
+                 String condition = "CUSTREFID = '"+id+"'";
+            	 new Controller().updateRecords(sessionId,Query.bidTblName,columnsF,values,condition);
+             }
         }
     }
     
+    
+    private void processPostingFailureFailedBids(String creationattribute) {
+    	String attribute = "FAILEDBID";
+    	String wiName = new Controller().getCreatedWorkItem(sessionId,creationattribute,initiateFlagNo);
+    	String column = "FAILEDTRANUTILITYWINAME";
+    	String value = "'"+wiName+"'";
+    	
+    	resultSet = new Controller().getRecords(Query.getProcessPostingFailureFailedBids(flag));
+        for (Map<String,String> result : resultSet){
+        	String id = result.get(bidCustIdCol.toUpperCase());
+        	String condition = "CUSTREFID = '"+id+"'";
+        	new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
+        }
+ 
+    	new CompleteWorkItem(sessionId,wiName,attribute,"F"); 	
+    }
+    
     private void processSuccessfulBids() {
-    	String column = "POSTINTEGRATIONFLAG";
+    	String columnS = "POSTINTEGRATIONFLAG";
+    	String columnsF = "POSTINTEGRATIONFLAG, FAILEDPOSTFLAG";
     	String wiName = "";
     	String attribute = "SUCCESSBID";
     	resultSet = new Controller().getRecords(Query.getCpAllocatedPrimaryBids("N"));
@@ -94,12 +121,33 @@ public class PrimaryMarket implements Runnable,ConstantsI {
             String allocationPercentage = result.get(bidAllocationPercentageCol.toUpperCase());
 
             //credit the principal and debit customer principal based on allocation percentage
-            
+            if (postingIsSucessful) {
             String value = "'Y'";
             String condition = "CUSTREFID = '"+id+"'";
-            new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
+            new Controller().updateRecords(sessionId,Query.bidTblName,columnS,value,condition);
             new CompleteWorkItem(sessionId,wiName,attribute,flag);
+            }
+            else {
+           	     String value = "'N'";
+                 String condition = "CUSTREFID = '"+id+"'";
+           	     new Controller().updateRecords(sessionId,Query.bidTblName,columnsF,value,condition);
+    	    }
+         } 
+    }
+    
+    private void processPostingFailureSuccessBids(String creationattribute) {
+    	String attribute = "SUCCESSBID";
+    	String wiName = new Controller().getCreatedWorkItem(sessionId,creationattribute,initiateFlagNo);
+    	String column = "FAILEDTRANUTILITYWINAME";
+    	String value = "'"+wiName+"'";
+    	
+    	resultSet = new Controller().getRecords(Query.getProcessPostingFailureSuccessBids("N"));
+    	for (Map<String,String> result : resultSet){
+        	String id = result.get(bidCustIdCol.toUpperCase());
+        	String condition = "CUSTREFID = '"+id+"'";
+        	new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
     	}
+    	new CompleteWorkItem(sessionId,wiName,attribute,"S");   	
     }
 
 }
