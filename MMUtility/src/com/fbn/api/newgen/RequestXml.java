@@ -69,6 +69,26 @@ public class RequestXml  {
 		stringBuilder.append("</WFUploadWorkItem_Input>");
 		return stringBuilder.toString();
 	}
+	
+	public static String getAddToMailQueue(String cabinetName, String sessionId, String processDefId, String activityId, String processInstanceId, String mailFrom, String mailTo, String mailCC, String mailSubject, String mailMessage) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("<?xml version=1.0?>");
+		stringBuilder.append("<WFAddToMailQueue_Input>");
+		stringBuilder.append("<Option>WFAddToMailQueue</Option>");
+		stringBuilder.append("<EngineName>").append(cabinetName).append("</EngineName>");
+		stringBuilder.append("<SessionId>").append(sessionId).append("</SessionId>");
+		stringBuilder.append("<ProcessDefId>").append(processDefId).append("</ProcessDefId>");
+		stringBuilder.append("<ActivityId>").append(activityId).append("<ActivityId>");
+		stringBuilder.append("<ProcessInstanceId>").append(processInstanceId).append("</ProcessInstanceId>");
+		stringBuilder.append("<WorkItemId>1</WorkItemId>");
+		stringBuilder.append("<MailFrom>").append(mailFrom).append("</MailFrom>");
+		stringBuilder.append("<MailTo>").append(mailTo).append("</MailTo>");
+		stringBuilder.append("<MailCC>").append(mailCC).append("</MailCC>");
+		stringBuilder.append("<MailSubject>").append(mailSubject).append("</MailSubject>");
+		stringBuilder.append("<MailMessage>").append(mailMessage).append("</MailMessage>");
+		stringBuilder.append("</WFAddToMailQueue_Input>");		
+		return stringBuilder.toString();
+	}
 
 	public static String getLockWorkItemInputXml(String cabinetName, String sessionId, String processInstanceId) {
 		return  "<?xml version=\"1.0\" ?>\n"

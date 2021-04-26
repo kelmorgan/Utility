@@ -2,6 +2,7 @@ package com.fbn.cp;
 
 import com.fbn.api.newgen.CompleteWorkItem;
 import com.fbn.api.newgen.Controller;
+import com.fbn.utils.Commons;
 import com.fbn.utils.ConstantsI;
 import com.fbn.utils.Query;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
         processPostingFailureFailedBids();
         processSuccessfulBids();
         processPostingFailureSuccessBids();
+        processAllBidsOnMaturity();
     }
 
     private void  processPrimaryBids(){
@@ -135,7 +137,8 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     	    }
          } 
     }
-    
+     
+
     private void processPostingFailureSuccessBids() {
     	String attribute = "<CP_UTILITYFLAG>S</CP_UTILITYFLAG>";
     	String wiName = new Controller().getCreatedWorkItem(sessionId,attribute,initiateFlagNo);
@@ -149,6 +152,32 @@ public class PrimaryMarket implements Runnable,ConstantsI {
         	new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
     	}
     	new CompleteWorkItem(sessionId,wiName);
+    }
+    
+    private void processAllBidsOnMaturity() {	
+    	resultSet = new Controller().getRecords(Query.getAllBidsOnMaturity());
+    	String wiName = "";
+    	String columns = "MATUREDFLAG, PAIDFLAG, POSTINTEGRATIONMATUREFLAG";
+        for (Map<String ,String> result : resultSet){
+        	    String date = result.get(maturityDate.toUpperCase());
+          
+                if (Commons.isMatured(date)) {
+                	 String id = result.get(bidCustIdCol.toUpperCase());
+                     wiName = result.get(bidWinameCol.toUpperCase());
+                     String custSol = result.get(bidCustSolCol.toUpperCase());
+                     String custPrincipal = result.get(bidCustPrincipalCol.toUpperCase());
+                     String branchSol = result.get(bidBranchSolCol.toUpperCase());
+                     String allocationPercentage = result.get(bidAllocationPercentageCol.toUpperCase());
+                	
+                    //Perform all the neccessary posting
+                     
+                	String values = "'Y', 'Y', 'Y'";
+                	String condition = "CUSTREFID = '"+id+"'";
+                	new Controller().updateRecords(sessionId,Query.bidTblName,columns,values,condition);
+                    new CompleteWorkItem(sessionId,wiName);
+                }
+        }
+    	
     }
 
 }

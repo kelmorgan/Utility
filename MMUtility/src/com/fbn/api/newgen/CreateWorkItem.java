@@ -12,7 +12,7 @@ public class CreateWorkItem {
         this.initiateFlag = initiateFlag;
     }
 
-    public  String createWorkItem(){
+    public  String createWorkIntem(){
         return new Controller().getCreatedWorkItem(sessionId,attributes,initiateFlag);
     }
 }
