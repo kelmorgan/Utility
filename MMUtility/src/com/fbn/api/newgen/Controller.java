@@ -11,6 +11,7 @@ public class Controller implements ConstantsI {
     private final XmlParser xmlParser = new XmlParser();
     private String inputXml;
     private String outputXml;
+    
     public String getSessionId(){
         String connectXml = RequestXml.getConnectCabinetXml(cabinetName,userName,password);
         try {
@@ -86,6 +87,19 @@ public class Controller implements ConstantsI {
             e.printStackTrace();
         }
     }
+    
+    public void sendMail(String sessionId, String activityId, String processInstanceId, String mailFrom, String mailTo, String mailCC, String mailSubject, String mailMessage   ) {
+    	inputXml = RequestXml.getAddToMailQueue(cabinetName, sessionId, processDefId, activityId, processInstanceId, mailFrom, mailTo, mailCC, mailSubject, mailMessage);
+    	
+    	try {
+    		outputXml = Api.executeCall(inputXml);
+    		
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    }
+    
     public void disconnectSession (String sessionId){
         inputXml = RequestXml.getDisconnectCabinetXml(cabinetName,sessionId);
         System.out.println("input from disconnect cabinet-- "+inputXml);

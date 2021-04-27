@@ -7,6 +7,7 @@ public class Query {
     public static String investmentTblName = "mm_sminvestments_tbl";
     public static String stColId = "refid";
     public static String stColCloseFlag = "closeflag";
+    
 	public static String getSetupTblQuery() {
         return  "select * from mm_setup_tbl";
     }
@@ -31,5 +32,7 @@ public class Query {
     public static String getAllBidsOnMaturity(){
     	return "select custrefid, maturitydate, bidwiname, custsol,custacctno, custprincipal, branchsol,allocationpercentage from mm_bid_tbl Where ...";
     }
-   
+    public static String getCpInvestmentClosedateTbl() {
+    	return "select investmentid, closedate from mm_sminvestments_tbl"; 
+    }
 }

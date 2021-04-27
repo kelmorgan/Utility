@@ -22,6 +22,8 @@ public interface ConstantsI {
 	String bidWinameCol = "BIDWINAME";
 	String maturityDate = "MATURITYDATE";
 	String bidAllocationPercentageCol = "ALLOCATIONPERCENTAGE";
+	String investClosedate = "closedate"; 
+	String investID = "investmentid";
 	
 	//CONFIG PROPERTIES
 	String appServerIp = "172.16.249.62";

@@ -26,7 +26,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
         processPostingFailureFailedBids();
         processSuccessfulBids();
         processPostingFailureSuccessBids();
-        processAllBidsOnMaturity();
+        processAllPmBidsOnMaturity();
     }
 
     private void  processPrimaryBids(){
@@ -154,7 +154,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     	new CompleteWorkItem(sessionId,wiName);
     }
     
-    private void processAllBidsOnMaturity() {	
+    private void processAllPmBidsOnMaturity() {	
     	resultSet = new Controller().getRecords(Query.getAllBidsOnMaturity());
     	String wiName = "";
     	String columns = "MATUREDFLAG, PAIDFLAG, POSTINTEGRATIONMATUREFLAG";
