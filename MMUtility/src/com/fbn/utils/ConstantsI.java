@@ -25,6 +25,9 @@ public interface ConstantsI {
 	String investClosedate = "closedate"; 
 	String investID = "investmentid";
 	
+	String tbCustAcctNo = "TB_CUSTACCTNUM";
+	String wiName = "WINAME";
+	
 	//CONFIG PROPERTIES
 	String appServerIp = "172.16.249.62";
 	String cabinetName = "fbnibpsuatcab";

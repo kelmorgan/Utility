@@ -15,31 +15,13 @@ public class Main extends Thread implements ConstantsI {
     public Main() {
         this.sessionId = new Controller().getSessionId();
    }
-    private void closeMarketWindow(){
-        Set<Map<String, String>> resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery());
-        System.out.println(resultSet);
-        for (Map<String ,String> result : resultSet){
-            String date = result.get("CLOSEDATE");
-            System.out.println(date);
-            String wiName = result.get("WINAME");
-            System.out.println(wiName);
-            String id = result.get("REFID");
-            System.out.println(id);
-            String value = "'"+flag+"'";
-            String condition = "refid = '"+id+"'";
-
-            if (Commons.compareDate(date)) {
-                new Controller().updateRecords(sessionId, Query.setupTblName, Query.stColCloseFlag, value, condition);
-                new CompleteWorkItem(sessionId,wiName,"CLOSEFLAG","Y");
-            }
-        }
-    }
+    
     private void disconnectSession (){
         new Controller().disconnectSession(sessionId);
     }
 
     public void run() {
-        closeMarketWindow();
+        //closeMarketWindow();
         disconnectSession();
        // new cpMain().run();
     }

@@ -20,6 +20,7 @@ public class SecondaryMarket implements Runnable, ConstantsI {
     @Override
     public void run() {
     	closeSmInvestmentWindow();
+    	processAllSmBidsOnMaturity();
     }
  
     private void closeSmInvestmentWindow() {
@@ -41,7 +42,7 @@ public class SecondaryMarket implements Runnable, ConstantsI {
     }
     
     private void processAllSmBidsOnMaturity() {	
-    	resultSet = new Controller().getRecords(Query.getAllBidsOnMaturity());
+    	resultSet = new Controller().getRecords(Query.getCpAllBidsOnMaturity());
     	String wiName = "";
     	String columns = "MATUREDFLAG, PAIDFLAG, POSTINTEGRATIONMATUREFLAG";
         for (Map<String ,String> result : resultSet){

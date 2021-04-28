@@ -2,6 +2,7 @@ package com.fbn.cp;
 
 import com.fbn.api.newgen.CompleteWorkItem;
 import com.fbn.api.newgen.Controller;
+import com.fbn.api.newgen.CreateWorkItem;
 import com.fbn.utils.Commons;
 import com.fbn.utils.ConstantsI;
 import com.fbn.utils.Query;
@@ -21,6 +22,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
 
     @Override
     public void run() {
+    	closeCpMarketWindow();
         processPrimaryBids();
         processFailedBids();
         processPostingFailureFailedBids();
@@ -28,10 +30,30 @@ public class PrimaryMarket implements Runnable,ConstantsI {
         processPostingFailureSuccessBids();
         processAllPmBidsOnMaturity();
     }
+    
+    private void closeCpMarketWindow(){
+        Set<Map<String, String>> resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery());
+        System.out.println(resultSet);
+        for (Map<String ,String> result : resultSet){
+            String date = result.get("CLOSEDATE");
+            System.out.println(date);
+            String wiName = result.get("WINAME");
+            System.out.println(wiName);
+            String id = result.get("REFID");
+            System.out.println(id);
+            String value = "'"+flag+"'";
+            String condition = "refid = '"+id+"'";
+
+            if (Commons.compareDate(date)) {
+                new Controller().updateRecords(sessionId, Query.setupTblName, Query.stColCloseFlag, value, condition);
+                new CompleteWorkItem(sessionId,wiName,"CLOSEFLAG","Y");
+            }
+        }
+    }
 
     private void  processPrimaryBids(){
         String attribute = "<CP_UTILITYFLAG>Y</CP_UTILITYFLAG>";
-        String wiName = new Controller().getCreatedWorkItem(sessionId,attribute,initiateFlagNo);
+        String wiName = new CreateWorkItem(sessionId,attribute,initiateFlagNo).getCreatedWorkItem();
         resultSet = new Controller().getRecords(Query.getCpPmBidsToProcessQuery());
         String columns = "utilitywiname,groupindex,groupindexflag,processflag";
         for (Map<String,String >result : resultSet){
@@ -95,11 +117,11 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     
     private void processPostingFailureFailedBids() {
     	String attribute = "<CP_UTILITYFLAG>F</CP_UTILITYFLAG>";
-    	String wiName = new Controller().getCreatedWorkItem(sessionId,attribute,initiateFlagNo);
+    	String wiName = new CreateWorkItem(sessionId,attribute,initiateFlagNo).getCreatedWorkItem();
     	String column = "FAILEDTRANUTILITYWINAME";
     	String value = "'"+wiName+"'";
     	
-    	resultSet = new Controller().getRecords(Query.getProcessPostingFailureFailedBids(flag));
+    	resultSet = new Controller().getRecords(Query.getCpProcessPostingFailureFailedBids(flag));
         for (Map<String,String> result : resultSet){
         	String id = result.get(bidCustIdCol.toUpperCase());
         	String condition = "CUSTREFID = '"+id+"'";
@@ -141,11 +163,11 @@ public class PrimaryMarket implements Runnable,ConstantsI {
 
     private void processPostingFailureSuccessBids() {
     	String attribute = "<CP_UTILITYFLAG>S</CP_UTILITYFLAG>";
-    	String wiName = new Controller().getCreatedWorkItem(sessionId,attribute,initiateFlagNo);
+    	String wiName = new CreateWorkItem(sessionId,attribute,initiateFlagNo).getCreatedWorkItem();
     	String column = "FAILEDTRANUTILITYWINAME";
     	String value = "'"+wiName+"'";
     	
-    	resultSet = new Controller().getRecords(Query.getProcessPostingFailureSuccessBids("N"));
+    	resultSet = new Controller().getRecords(Query.getCpProcessPostingFailureSuccessBids("N"));
     	for (Map<String,String> result : resultSet){
         	String id = result.get(bidCustIdCol.toUpperCase());
         	String condition = "CUSTREFID = '"+id+"'";
@@ -155,7 +177,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     }
     
     private void processAllPmBidsOnMaturity() {	
-    	resultSet = new Controller().getRecords(Query.getAllBidsOnMaturity());
+    	resultSet = new Controller().getRecords(Query.getCpAllBidsOnMaturity());
     	String wiName = "";
     	String columns = "MATUREDFLAG, PAIDFLAG, POSTINTEGRATIONMATUREFLAG";
         for (Map<String ,String> result : resultSet){
