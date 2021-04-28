@@ -1,7 +1,4 @@
-package com.fbn.api.fbn;
-
-import com.fbn.api.fbn.Api;
-import com.fbn.utils.XmlParser;
+package com.fbn.api.fbn.controller;
 
 public class Controller {
 

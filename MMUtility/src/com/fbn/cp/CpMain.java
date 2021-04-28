@@ -1,8 +1,8 @@
 package com.fbn.cp;
 
-public class cpMain implements Runnable {
+public class CpMain implements Runnable {
     private final String sessionId;
-    public cpMain(String sessionId) {
+    public CpMain(String sessionId) {
        this.sessionId = sessionId;
     }
     @Override

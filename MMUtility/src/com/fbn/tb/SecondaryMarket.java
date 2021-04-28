@@ -3,10 +3,6 @@ package com.fbn.tb;
 import java.util.Map;
 import java.util.Set;
 
-import com.fbn.api.newgen.CompleteWorkItem;
-import com.fbn.api.newgen.Controller;
-import com.fbn.utils.Commons;
-import com.fbn.utils.Query;
 import com.fbn.utils.ConstantsI;
 
 

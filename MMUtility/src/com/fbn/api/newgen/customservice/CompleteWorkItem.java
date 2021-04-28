@@ -1,4 +1,6 @@
-package com.fbn.api.newgen;
+package com.fbn.api.newgen.customservice;
+
+import com.fbn.api.newgen.controller.Controller;
 
 public class CompleteWorkItem  {
     private final String wiName;

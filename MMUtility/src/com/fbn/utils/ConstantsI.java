@@ -24,7 +24,9 @@ public interface ConstantsI {
 	String bidAllocationPercentageCol = "ALLOCATIONPERCENTAGE";
 	String investClosedate = "closedate"; 
 	String investID = "investmentid";
-	
+	String cpPrimaryMarket = "primary";
+	String cpSecondaryMarket = "secondary";
+
 	String tbCustAcctNo = "TB_CUSTACCTNUM";
 	String wiName = "WINAME";
 	
@@ -38,4 +40,17 @@ public interface ConstantsI {
 	String userName = "FBNTreasuryUtilityUser";
 	String password = "system12345#";
 	String queueId = "1143";
+	String appServerIpLocal = "";
+	String appServerPortLocal = "";
+
+
+	// API SERVICE NAMES
+	String postServiceName = "postRequestToFinacle";
+	String fetchOdaAcctServiceName ="CURRENTACCOUNT";
+	String fetchCaaAcctServiceName ="SPECIALACCOUNT";
+	String fetchSbaAcctServiceName ="SAVINGACCOUNT";
+	String fetchLienServiceName = "FETCHLIEN";
+	String fetchLimitServiceName = "CIGETUSERLIMIT";
+	String searchTranServiceName = "CISEARCHTRANSACTION";
+	String tokenValidationServiceName = "TOKENVALIDATION";
 }

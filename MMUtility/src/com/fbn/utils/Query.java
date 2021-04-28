@@ -14,8 +14,8 @@ public class Query {
 	public static String getBidTblQuery() {
         return  "select * from mm_bid_tbl";
     }
-	public static String getCpOpenWindowQuery() {
-        return  "select closedate , winame,refid from mm_setup_tbl where process = 'Commercial Paper' and closeflag = 'N'";
+	public static String getCpOpenWindowQuery(String marketType) {
+        return  "select closedate , winame,refid from mm_setup_tbl where process = 'Commercial Paper' and markettype = '"+marketType+"' and closeflag = 'N'";
     }
 	public static String getTbOpenWindowQuery() {
         return  "select closedate, refid from mm_setup_tbl where process = 'Treasury Bills' and closeflag = 'N'";

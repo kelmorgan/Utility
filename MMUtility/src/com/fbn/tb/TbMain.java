@@ -2,10 +2,10 @@ package com.fbn.tb;
 
 import com.fbn.cp.PrimaryMarket;
 
-public class TrMain implements Runnable {
+public class TbMain implements Runnable {
 	private final String sessionId;
 	
-	public TrMain(String sessionId) {
+	public TbMain(String sessionId) {
 		this.sessionId = sessionId;
     }
 	

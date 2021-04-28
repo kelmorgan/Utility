@@ -3,8 +3,8 @@ package com.fbn.cp;
 import java.util.Map;
 import java.util.Set;
 
-import com.fbn.api.newgen.CompleteWorkItem;
-import com.fbn.api.newgen.Controller;
+import com.fbn.api.newgen.customservice.CompleteWorkItem;
+import com.fbn.api.newgen.controller.Controller;
 import com.fbn.utils.Commons;
 import com.fbn.utils.Query;
 import com.fbn.utils.ConstantsI;
@@ -19,8 +19,29 @@ public class SecondaryMarket implements Runnable, ConstantsI {
 
     @Override
     public void run() {
+        closeCpMarketWindow();
     	closeSmInvestmentWindow();
     	processAllSmBidsOnMaturity();
+    }
+
+    private void closeCpMarketWindow(){
+        Set<Map<String, String>> resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery(cpSecondaryMarket));
+        System.out.println(resultSet);
+        for (Map<String ,String> result : resultSet){
+            String date = result.get("CLOSEDATE");
+            System.out.println(date);
+            String wiName = result.get("WINAME");
+            System.out.println(wiName);
+            String id = result.get("REFID");
+            System.out.println(id);
+            String value = "'"+flag+"'";
+            String condition = "refid = '"+id+"'";
+
+            if (Commons.compareDate(date)) {
+                new Controller().updateRecords(sessionId, Query.setupTblName, Query.stColCloseFlag, value, condition);
+                new CompleteWorkItem(sessionId,wiName,"CLOSEFLAG","Y");
+            }
+        }
     }
  
     private void closeSmInvestmentWindow() {

@@ -1,8 +1,8 @@
 package com.fbn.cp;
 
-import com.fbn.api.newgen.CompleteWorkItem;
-import com.fbn.api.newgen.Controller;
-import com.fbn.api.newgen.CreateWorkItem;
+import com.fbn.api.newgen.customservice.CompleteWorkItem;
+import com.fbn.api.newgen.controller.Controller;
+import com.fbn.api.newgen.customservice.CreateWorkItem;
 import com.fbn.utils.Commons;
 import com.fbn.utils.ConstantsI;
 import com.fbn.utils.Query;
@@ -12,7 +12,7 @@ import java.util.Set;
 public class PrimaryMarket implements Runnable,ConstantsI {
     private Set<Map<String,String>> resultSet;
 
-    boolean postingIsSucessful = true; //for structure purpose
+    boolean postingIsSuccessful = true; //for structure purpose
 
     public PrimaryMarket(String sessionId) {
         this.sessionId = sessionId;
@@ -32,7 +32,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     }
     
     private void closeCpMarketWindow(){
-        Set<Map<String, String>> resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery());
+        Set<Map<String, String>> resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery(cpPrimaryMarket));
         System.out.println(resultSet);
         for (Map<String ,String> result : resultSet){
             String date = result.get("CLOSEDATE");
@@ -88,7 +88,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     private void processFailedBids() {
     	String columnsS = "POSTINTEGRATIONFLAG, REVERSALFLAG";
     	String columnsF = "POSTINTEGRATIONFLAG, FAILEDPOSTFLAG";
-    	String wiName = empty;
+    	String wiName;
     	String attribute = "FAILEDBID";
     	resultSet = new Controller().getRecords(Query.getCpAllocatedPrimaryBids("Y"));
     	for (Map<String,String> result : resultSet){
@@ -99,17 +99,15 @@ public class PrimaryMarket implements Runnable,ConstantsI {
              String branchSol = result.get(bidBranchSolCol.toUpperCase());
 
              //perform reversal
-             if (postingIsSucessful) {  
-             String values = "'Y', 'Y'";
-             String condition = "CUSTREFID = '"+id+"'";
-             new Controller().updateRecords(sessionId,Query.bidTblName,columnsS,values,condition);
+            String values = "'Y', 'Y'";
+            String condition = "CUSTREFID = '"+id+"'";
+            if (postingIsSuccessful) {
+                new Controller().updateRecords(sessionId,Query.bidTblName,columnsS,values,condition);
              new CompleteWorkItem(sessionId,wiName,attribute,flag);
              
              }
              else {
-            	 String values = "'Y', 'Y'";
-                 String condition = "CUSTREFID = '"+id+"'";
-            	 new Controller().updateRecords(sessionId,Query.bidTblName,columnsF,values,condition);
+                new Controller().updateRecords(sessionId,Query.bidTblName,columnsF,values,condition);
              }
         }
     }
@@ -146,7 +144,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
             String allocationPercentage = result.get(bidAllocationPercentageCol.toUpperCase());
 
             //credit the principal and debit customer principal based on allocation percentage
-            if (postingIsSucessful) {
+            if (postingIsSuccessful) {
             String value = "'Y'";
             String condition = "CUSTREFID = '"+id+"'";
             new Controller().updateRecords(sessionId,Query.bidTblName,columnS,value,condition);
@@ -178,7 +176,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     
     private void processAllPmBidsOnMaturity() {	
     	resultSet = new Controller().getRecords(Query.getCpAllBidsOnMaturity());
-    	String wiName = "";
+    	String wiName;
     	String columns = "MATUREDFLAG, PAIDFLAG, POSTINTEGRATIONMATUREFLAG";
         for (Map<String ,String> result : resultSet){
         	    String date = result.get(maturityDate.toUpperCase());

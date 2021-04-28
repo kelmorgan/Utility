@@ -1,4 +1,4 @@
-package com.fbn.api.newgen;
+package com.fbn.api.newgen.generateXml;
 public class RequestXml  {
 
 	public static String getConnectCabinetXml(String cabinetName, String userName, String password){

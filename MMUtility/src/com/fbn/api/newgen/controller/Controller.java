@@ -1,5 +1,7 @@
-package com.fbn.api.newgen;
+package com.fbn.api.newgen.controller;
 
+import com.fbn.api.newgen.execute.Api;
+import com.fbn.api.newgen.generateXml.RequestXml;
 import com.fbn.utils.ConstantsI;
 import com.fbn.utils.DbConnect;
 import com.fbn.utils.XmlParser;

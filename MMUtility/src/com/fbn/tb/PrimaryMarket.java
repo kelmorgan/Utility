@@ -1,8 +1,8 @@
 package com.fbn.tb;
 
-import com.fbn.api.newgen.CompleteWorkItem;
-import com.fbn.api.newgen.Controller;
-import com.fbn.api.newgen.CreateWorkItem;
+import com.fbn.api.newgen.customservice.CompleteWorkItem;
+import com.fbn.api.newgen.controller.Controller;
+import com.fbn.api.newgen.customservice.CreateWorkItem;
 import com.fbn.utils.Commons;
 import com.fbn.utils.ConstantsI;
 import com.fbn.utils.Query;

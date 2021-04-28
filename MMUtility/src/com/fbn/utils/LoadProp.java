@@ -7,6 +7,8 @@ import java.util.Properties;
 
 public class LoadProp implements ConstantsI {
     public static Logger logger;
+    public static String serverIp;
+    public static String serverPort;
 
 
     static {
@@ -16,19 +18,12 @@ public class LoadProp implements ConstantsI {
             Properties properties = new Properties();
             InputStream in = new FileInputStream(configPath);
             properties.load(in);
-        }
-        catch  (UnsupportedEncodingException ex){
-            ex.printStackTrace();
-            logger.error("Error occurred in load property file - Unsupported Exception -- "+ ex.getMessage() );
-        }
-        catch (FileNotFoundException ex){
-            ex.printStackTrace();
-            logger.error("Error occurred in load property file - FileNotFoundException Exception-- "+ ex.getMessage());
+           serverIp = properties.getProperty(appServerIpLocal);
+           serverPort = properties.getProperty(appServerPortLocal);
         }
         catch (IOException ex){
             ex.printStackTrace();
             logger.error("Error occurred in load property file - IOException Exception-- "+ ex.getMessage());
         }
     }
-
 }
