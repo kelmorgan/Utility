@@ -29,6 +29,7 @@ public interface ConstantsI {
 
 	String tbCustAcctNo = "TB_CUSTACCTNUM";
 	String wiName = "WINAME";
+	String failedAtTUtilWiCreatedFlg = "FAILEDATTUTILWICREATEDFLG";
 	
 	//CONFIG PROPERTIES
 	String appServerIp = "172.16.249.62";
@@ -53,4 +54,5 @@ public interface ConstantsI {
 	String fetchLimitServiceName = "CIGETUSERLIMIT";
 	String searchTranServiceName = "CISEARCHTRANSACTION";
 	String tokenValidationServiceName = "TOKENVALIDATION";
+	
 }

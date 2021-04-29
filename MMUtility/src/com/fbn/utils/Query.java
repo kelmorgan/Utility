@@ -24,13 +24,13 @@ public class Query {
         return "select custrefid, tenor, rate, ratetype from mm_bid_tbl where process = 'Commercial Paper' and markettype= 'primary' and processflag ='N' and groupindexflag = 'N'";
     }
     public static String getTbWorkitemsOnTreasuryUtilityWS() {
-    	return "select winame, tb_custAcctNum, tb_custAcctEmail, tb_custAcctEmail, tb_schemecode,tb_BrnchPri_LienID, tb_status from MoneyMarket_ext where g_currws = 'TreasuryUtility' and assign = 'TreasuryUtility' and status = ''";
+    	return "select winame, tb_custAcctNum, tb_custAcctEmail, tb_custAcctEmail, tb_schemecode,tb_BrnchPri_LienID, tb_status from MoneyMarket_ext where g_currws = 'Treasury_Utility' and assign = 'TreasuryUtility'";
     }
     public static String getCpAllocatedPrimaryBids(String flag) {
     	return "select custrefid, bidwiname, custsol,custacctno, custprincipal, branchsol,allocationpercentage from mm_bid_tbl where failedflag = '"+flag+"' and process = 'Commercial Paper' and markettype = 'primary' and allocatedflag ='Y'";
     }
     public static String getTbAllocatedPrimaryBids(String bidstatus) {
-    	return "select winame, tb_custAcctNum, tb_custAcctEmail, tb_custAcctEmail, tb_schemecode,tb_BrnchPri_LienID, tb_status from moneymarket_ext where g_currws = 'Approved_Bids' and bidstatus = '"+bidstatus+"'";
+    	return "select winame, tb_custAcctNum, tb_custAcctEmail, tb_custAcctEmail, tb_schemecode,tb_BrnchPri_LienID, tb_status from moneymarket_ext where g_currws = 'Approved_Bids_Utility' and bidstatus = '"+bidstatus+"'";
     }
     public static String getCpProcessPostingFailureFailedBids(String flag) {
     	return "select custrefid from mm_bid_tbl where failedflag = '"+flag+"' and process = 'Commercial Paper' and markettype = 'primary' and allocatedflag ='Y' and postintegrationflag = 'Y' and failedpostflag = 'Y'";	
@@ -44,6 +44,13 @@ public class Query {
     public static String getCpInvestmentClosedateTbl() {
     	return "select investmentid, closedate from mm_sminvestments_tbl"; 
     }
+    public static String getTbfailedAtTUtilWiCreatedFlg() {
+    	return "select failedAtTUtilWiCreatedFlg from mm_setup_tbl where process = 'Treasury Bills' and markettype = 'primary'";
+    }
+    public static String getCpProcessBidsOnAwaitingMaturity(){
+    	return "select custrefid, bidwiname, maturitydate, custemail, branchsol, lienflag from mm_bid_tbl where awaitingmaturityflag = 'Y'  and failedpostflag = 'N'";
+    }
+    
     
     
 }

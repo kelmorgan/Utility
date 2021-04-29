@@ -3,6 +3,7 @@ package com.fbn.utils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class Commons implements ConstantsI{
     public static boolean isLeapYear (){
@@ -22,6 +23,9 @@ public class Commons implements ConstantsI{
     }
     public static boolean isEmpty(String data){
     	return data.equalsIgnoreCase("");
+    }
+    public static boolean is7DaysToMaturity(String date){
+        return ChronoUnit.DAYS.between(LocalDate.now(),LocalDate.parse(date)) == 7;
     }
 
 }

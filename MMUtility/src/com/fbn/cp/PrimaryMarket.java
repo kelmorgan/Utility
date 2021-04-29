@@ -28,7 +28,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
         processPostingFailureFailedBids();
         processSuccessfulBids();
         processPostingFailureSuccessBids();
-        processAllPmBidsOnMaturity();
+        processAllPmBidsOnAwaitingMaturity();
     }
     
     private void closeCpMarketWindow(){
@@ -130,7 +130,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     }
     
     private void processSuccessfulBids() {
-    	String columnS = "POSTINTEGRATIONFLAG";
+    	String columnS = "POSTINTEGRATIONFLAG,AWAITINGMATURITYFLAG";
     	String columnsF = "POSTINTEGRATIONFLAG, FAILEDPOSTFLAG";
     	String wiName = "";
     	String attribute = "SUCCESSBID";
@@ -142,17 +142,16 @@ public class PrimaryMarket implements Runnable,ConstantsI {
             String custPrincipal = result.get(bidCustPrincipalCol.toUpperCase());
             String branchSol = result.get(bidBranchSolCol.toUpperCase());
             String allocationPercentage = result.get(bidAllocationPercentageCol.toUpperCase());
+            String condition = "CUSTREFID = '"+id+"'";
 
             //credit the principal and debit customer principal based on allocation percentage
             if (postingIsSuccessful) {
-            String value = "'Y'";
-            String condition = "CUSTREFID = '"+id+"'";
+            String value = "'Y','Y'";
             new Controller().updateRecords(sessionId,Query.bidTblName,columnS,value,condition);
             new CompleteWorkItem(sessionId,wiName,attribute,flag);
             }
             else {
-           	     String value = "'N'";
-                 String condition = "CUSTREFID = '"+id+"'";
+           	     String value = "'Y','Y'";  
            	     new Controller().updateRecords(sessionId,Query.bidTblName,columnsF,value,condition);
     	    }
          } 
@@ -174,7 +173,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     	new CompleteWorkItem(sessionId,wiName);
     }
     
-    private void processAllPmBidsOnMaturity() {	
+    private void processAllPmBidsOnAwaitingMaturity() {	
     	resultSet = new Controller().getRecords(Query.getCpAllBidsOnMaturity());
     	String wiName;
     	String columns = "MATUREDFLAG, PAIDFLAG, POSTINTEGRATIONMATUREFLAG";
@@ -199,5 +198,6 @@ public class PrimaryMarket implements Runnable,ConstantsI {
         }
     	
     }
+    
 
 }
