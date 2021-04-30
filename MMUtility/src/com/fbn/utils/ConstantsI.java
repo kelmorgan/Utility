@@ -20,7 +20,8 @@ public interface ConstantsI {
 	String bidMarketTypeCol = "MARKETTYPE";
 	String bidAllocatedFlagCol = "ALLOCATEDFLAG";
 	String bidWinameCol = "BIDWINAME";
-	String maturityDate = "MATURITYDATE";
+	String bidmaturityDate = "MATURITYDATE";
+	String bidlienflag = "LIENFLAG";
 	String bidAllocationPercentageCol = "ALLOCATIONPERCENTAGE";
 	String investClosedate = "closedate"; 
 	String investID = "investmentid";

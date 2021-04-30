@@ -49,12 +49,9 @@ public class PrimaryMarket implements Runnable,ConstantsI {
 	 //Debiting  principal
 	 private void processTbWorkitemsOnTreasuryUtilityWS() {
 		    String columns = "TB_DECISION, FAILEDATTREASURYFLG";
-		    String attribute = "<TB_UTILITYFLAG>Y</TB_UTILITYFLAG>";
 		    resultSet = new Controller().getRecords(Query.getTbWorkitemsOnTreasuryUtilityWS()); //get all workitems at Treasury_Utility workstep
     
-		    for (Map<String, String> result : resultSet) {
-		    	
-		    	
+		    for (Map<String, String> result : resultSet) {	
 		    	String custAcctNo = result.get(tbCustAcctNo);
 		    	String id = result.get(wiName);
 		    	String tbStatus = result.get("TB_STATUS"); //create this variable on MoneyMarket_EXT
@@ -78,12 +75,20 @@ public class PrimaryMarket implements Runnable,ConstantsI {
                 }
                  
 		    }
+		    
+		    String column = "FAILEDATUTILWICREATEDFLG";
+		    String value = "Y";
+		    
 		    resultSet = new Controller().getRecords(Query.getTbfailedAtTUtilWiCreatedFlg());
-		    for (Map<String, String> result : resultSet) {
+		    for (Map<String, String> result : resultSet) {		    	
 		    	String failedAtTUtilWCreatedFlg = result.get(failedAtTUtilWiCreatedFlg);
+		    	String id = result.get("REFID");
+		    	
 		    	if(failedAtTUtilWCreatedFlg.equalsIgnoreCase("N")) {
-		    		String wiName = new CreateWorkItem(sessionId,attribute,initiateFlagNo).getCreatedWorkItem(); //create a new workitem to be routed to Treasury_Officer_verifier queue --should have the marketrefid.
-		    			
+		    		String attributes = "<TB_UPMWU_REF>'"+id+"'</TB_UPMWU_REF><TB_FAILEDATTREASURYUTILITYFLG>Y</TB_FAILEDATTREASURYUTILITYFLG>";
+		    		String wiName = new CreateWorkItem(sessionId,attributes,initiateFlagNo).getCreatedWorkItem(); //create a new workitem to be routed to Treasury_Officer_verifier queue --should have the marketrefid.
+		    		String condition = "refid = '"+id+"'";
+		    		new Controller().updateRecords(sessionId, Query.setupTblName, column, value, condition);	
 		    	}
 		    }
 		    	 
@@ -144,11 +149,83 @@ public class PrimaryMarket implements Runnable,ConstantsI {
 	            	 new Controller().updateRecords(sessionId,Query.extTblName,columnF,values,condition);
 	             }
 	             new CompleteWorkItem(sessionId,id); //complete workitem
-	             
-	             String wiName = new CreateWorkItem(sessionId,attribute,initiateFlagNo).getCreatedWorkItem(); //create Attribute
-            }	    	
+	                   
+            }
+	    	 String column = "FAILEDRVSALSTOPSWICREATEDFLG";
+	 		 String value = "Y";
+	 		    
+	 		 resultSet = new Controller().getRecords(Query.getTbfailedRvsalsTOpsWiCreatedFlg());
+	 		 for (Map<String, String> result : resultSet) {		    	
+	 		    	String failedAtTUtilWCreatedFlg = result.get(failedAtTUtilWiCreatedFlg);
+	 		    	String id = result.get("REFID");
+	 		    	
+	 		    	if(failedAtTUtilWCreatedFlg.equalsIgnoreCase("N")) {
+	 		    		String attributes = "<TB_UPMWU_REF>'"+id+"'</TB_UPMWU_REF><TB_REVERSALFAILEDATAPPRVDBIDSFLG>Y</TB_REVERSALFAILEDATAPPRVDBIDSFLG>";
+	 		    		String wiName = new CreateWorkItem(sessionId,attributes,initiateFlagNo).getCreatedWorkItem(); //create a new workitem to be routed to Treasury_Officer_verifier queue --should have the marketrefid.
+	 		    		String condition = "refid = '"+id+"'";
+	 		    		new Controller().updateRecords(sessionId, Query.setupTblName, column, value, condition);	
+	 		    	}
+	 		 }
 	  }
-
-		 
+	 
+	 //Moving workitems from awaiting maturity workstep to Matured workstep
+	 private void processWIfromAwaitingMaturityToMaturedWS() {
+		 resultSet = new Controller().getRecords(Query.getTbProcessBidsOnAwaitingMaturity());
+		 for (Map<String, String> result : resultSet) {
+			 	String id = result.get(wiName);
+		    	String maturityDate = result.get("");
+		    	String lienStatus = result.get("");
+		    	String TresaurylienStatus = result.get("");
+		    	if (Commons.is7DaysToMaturity(maturityDate) && lienStatus == "Y") {
+		    		//send mail to branch initiator, verifier, customer		
+		    	}
+		    	else {
+		    		if(Commons.isMatured(maturityDate) && lienStatus == "N") {
+		    			if(TresaurylienStatus == "N") {
+		    				String column = "TB_DECISION";
+		    				String value = "'Approve'";
+		                    String condition = "winame = '"+id+"'";
+		                    new Controller().updateRecords(sessionId, Query.extTblName, column, value, condition);    				
+		    			}	    			
+		    		}
+		    	}
+		 }	 
+	 }
+	 
+	 
+	 private void processAllPmBidsOnTreasuryOpsMaturity(){
+		 String column = "failedMatrtyPostTVerWiCreatedFlg";
+		 resultSet = new Controller().getRecords(Query.getTbProcessBidsOnAwaitingMaturity());
+		 for (Map<String, String> result : resultSet) {
+			 String id = result.get(wiName);
+			 String lienStatus = result.get("");
+			 if(lienStatus == "N") {
+				 //perform posting credit the principal or the interest to the customer based on ***
+				 if (postingIsSucessful) {			 
+				 }
+				 else {
+					 String value = "'N'";
+	            	 String condition = "winame = '"+id+"'";
+	            	 new Controller().updateRecords(sessionId,Query.extTblName,column,value,condition);
+	            	 
+				 }
+				 new CompleteWorkItem(sessionId,wiName);
+				 //send mail
+				 String columnF = "FAILEDATUTILWICREATEDFLG";
+				 String value = "Y";
+				 Set<Map<String,String>> resultSets = new Controller().getRecords(Query.getfailedMatrtyPostTVerWiCreatedFlg());
+				 for (Map<String, String> result1 : resultSets) {		    	
+				    	String failedMatrtyPostTVerWiCreatedFlg = result.get("");
+				    	String refid = result.get("REFID");	    	
+				    	if(failedMatrtyPostTVerWiCreatedFlg.equalsIgnoreCase("N")) {
+				    		String attributes = "<TB_UPMWU_REF>'"+id+"'</TB_UPMWU_REF><TB_FAILEDMATRTYPOSTTVERWICREATEDFLG>Y</TB_FAILEDMATRTYPOSTTVERWICREATEDFLG>";
+				    		String wiName = new CreateWorkItem(sessionId,attributes,initiateFlagNo).getCreatedWorkItem(); //create a new workitem to be routed to Treasury_Officer_verifier queue --should have the marketrefid.
+				    		String condition = "refid = '"+id+"'";
+				    		new Controller().updateRecords(sessionId, Query.setupTblName, column, value, condition);	
+				    	}
+				 }			 
+			 }		 
+		 }	 
+	 }
 
 }

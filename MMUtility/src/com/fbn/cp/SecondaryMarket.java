@@ -67,7 +67,7 @@ public class SecondaryMarket implements Runnable, ConstantsI {
     	String wiName = "";
     	String columns = "MATUREDFLAG, PAIDFLAG, POSTINTEGRATIONMATUREFLAG";
         for (Map<String ,String> result : resultSet){
-        	    String date = result.get(maturityDate.toUpperCase());
+        	    String date = result.get(bidmaturityDate.toUpperCase());
           
                 if (Commons.isMatured(date)) {
                 	 String id = result.get(bidCustIdCol.toUpperCase());

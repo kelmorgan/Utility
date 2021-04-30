@@ -173,12 +173,12 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     	new CompleteWorkItem(sessionId,wiName);
     }
     
-    private void processAllPmBidsOnAwaitingMaturity() {	
+    private void processAllPmBidsOnAwaitingMaturity() {
     	resultSet = new Controller().getRecords(Query.getCpAllBidsOnMaturity());
     	String wiName;
     	String columns = "MATUREDFLAG, PAIDFLAG, POSTINTEGRATIONMATUREFLAG";
         for (Map<String ,String> result : resultSet){
-        	    String date = result.get(maturityDate.toUpperCase());
+        	    String date = result.get(bidmaturityDate.toUpperCase());
           
                 if (Commons.isMatured(date)) {
                 	 String id = result.get(bidCustIdCol.toUpperCase());
@@ -197,6 +197,43 @@ public class PrimaryMarket implements Runnable,ConstantsI {
                 }
         }
     	
+    }
+    
+    private void processBidsOnAwaitingMaturity() {
+    	resultSet = new Controller().getRecords(Query.getCpProcessBidsOnAwaitingMaturity());
+    	 for (Map<String, String> result : resultSet) {
+			 	String id = result.get(bidCustIdCol);
+		    	String maturDate = result.get(bidmaturityDate);
+		    	String lienflg = result.get(bidlienflag);
+		    	if (Commons.is7DaysToMaturity(maturDate) && lienflg == "Y") {
+		    		//send mail to branch and customer		
+		    	}
+		    	else {
+		    		if(Commons.isMatured(maturDate) && lienflg == "N") {
+		    				String column = "STATUS";
+		    				String value = "'Matured'";
+		    				String condition = "CUSTREFID = '"+id+"'";
+		                    new Controller().updateRecords(sessionId, Query.bidTblName, column, value, condition);
+		                    new CompleteWorkItem(sessionId,wiName);
+		    		}
+		    		continue;
+		    	}
+		 } 
+    }
+    
+    private void processPostingFailureOnMaturity() {
+    	String attribute = "<CP_UTILITYFLAG>M</CP_UTILITYFLAG>";
+    	String wiName = new CreateWorkItem(sessionId,attribute,initiateFlagNo).getCreatedWorkItem();
+    	String column = "FAILEDTRANUTILITYWINAME";
+    	String value = "'"+wiName+"'";
+    	
+    	resultSet = new Controller().getRecords(Query.getCpProcessPostingFailureSuccessBids("N"));
+    	for (Map<String,String> result : resultSet){
+        	String id = result.get(bidCustIdCol.toUpperCase());
+        	String condition = "CUSTREFID = '"+id+"'";
+        	new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
+    	}
+    	new CompleteWorkItem(sessionId,wiName);
     }
     
 
