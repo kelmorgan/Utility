@@ -8,6 +8,6 @@ public class CpMain implements Runnable {
     @Override
     public void run() {
         new PrimaryMarket(sessionId).run();
-        //new SecondaryMarket(sessionId).run();
+        new SecondaryMarket(sessionId).run();
     }
 }
