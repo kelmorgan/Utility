@@ -3,7 +3,7 @@ package com.fbn.api.fbn.generateXml;
 public class RequestXml {
 
     public static String getUserLimitXml (String user){
-        return "<USERID>"+user+"</USERID>";
+        return "<USERID>"+user.toUpperCase()+"</USERID>";
     }
     public String searchRequestXml (String startDate, String endDate, String acctNo, String amount, String debitCredit, String transParts){
 
