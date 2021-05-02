@@ -4,8 +4,8 @@ package com.fbn.utils;
 public interface ConstantsI {
 	
 	
-	String configPath = "";
-	String logPath = "";
+	String configPath = "C:\\Users\\sn029154\\Documents\\Work\\Project\\util\\config\\mmutility.properties";
+	String logPath = "C:\\Users\\sn029154\\Documents\\Work\\Project\\util\\logs";
 	//String wiName = "FBN-00000000000134-MMW";
 	String dbDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 	String flag = "Y";
