@@ -12,7 +12,7 @@ import com.fbn.api.newgen.controller.Controller;
 
 public class Commons implements ConstantsI{
 	
-	private Set<Map<String,String>> resultSet;
+	public static Set<Map<String,String>> resultSet;
 	
     public static boolean isLeapYear (){
         return LocalDate.now().isLeapYear();
@@ -37,18 +37,18 @@ public class Commons implements ConstantsI{
     }
     
     public String getUsersMailsInGroup(String groupName){
-        String username= "";
+        StringBuilder username= new StringBuilder();
+        String domain = "@firstbanknigeria.com";
         try {
         	resultSet = new Controller().getRecords(Query.getUsersInGroup(groupName));
         	for (Map<String ,String> result : resultSet){
-                username = result.get("USERNAME");
+                username.append(result.get("USERNAME")).append(domain).append(',');
         	}
         }catch (Exception e){
-            
             return null;
         }
       
-        return username.trim();
+        return username.toString();
     }
 
   }

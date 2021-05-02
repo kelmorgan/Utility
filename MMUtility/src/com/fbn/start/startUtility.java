@@ -1,15 +1,11 @@
 package com.fbn.start;
 
-import com.fbn.api.newgen.controller.Controller;
-import com.fbn.utils.MailSetup;
+import com.fbn.api.fbn.controller.Controller;
+
 
 public class startUtility {
-	
 	  public static void main(String[] args) {
-	  String sessionId = new Controller().getSessionId();
-	  new MailSetup(sessionId, "1", "FBN-00000000000134-MMW", "sn029216@firstbanknigeria.com", "sn029154@firstbanknigeria.com", "", "Testing Money Market Mail","My New message for Commercial Paper").getSendMail();
-	 
+		  System.out.println(new Controller().getUserLimit());
 	  //new Main().start();
-
 	  }
 }

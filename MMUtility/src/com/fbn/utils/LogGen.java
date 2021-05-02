@@ -2,14 +2,14 @@ package com.fbn.utils;
 
 import org.apache.log4j.*;
 
-public class LogGen {
+public class LogGen implements ConstantsI {
     public static Logger getLoggerInstance(String loggerName) {
         Logger logger = null;
         try {
             logger = Logger.getLogger(loggerName);
             PatternLayout layout = new PatternLayout();
             layout.setConversionPattern("[%d{dd MMM yyyy HH:mm:ss:SSS}] (%F:%L) - %m%n");
-            String logFile = "MMUtilityLogs/" + loggerName + ".log";
+            String logFile = ""+logPath+"/" + loggerName + ".log";
             RollingFileAppender appender = new RollingFileAppender((Layout)layout, logFile, true);
             appender.setMaxFileSize("1000KB");
             appender.setMaxBackupIndex(10);

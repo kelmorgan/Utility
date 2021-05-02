@@ -6,9 +6,9 @@ import java.io.*;
 import java.util.Properties;
 
 public class LoadProp implements ConstantsI {
-    public static Logger logger;
+    private static Logger logger;
     public static String serverIp;
-    public static String serverPort;
+    public static String socketPort;
 
 
     static {
@@ -18,8 +18,10 @@ public class LoadProp implements ConstantsI {
             Properties properties = new Properties();
             InputStream in = new FileInputStream(configPath);
             properties.load(in);
-           serverIp = properties.getProperty(appServerIpLocal);
-           serverPort = properties.getProperty(appServerPortLocal);
+            serverIp = properties.getProperty(appServerIpField);
+            logger.info("serverIp-- "+serverIp);
+            socketPort = properties.getProperty(appSocketPortField);
+            logger.info("socketPort-- "+socketPort);
         }
         catch (IOException ex){
             ex.printStackTrace();

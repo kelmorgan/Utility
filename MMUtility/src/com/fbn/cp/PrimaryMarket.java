@@ -9,8 +9,7 @@ import com.fbn.utils.Query;
 import java.util.Map;
 import java.util.Set;
 
-public class PrimaryMarket implements Runnable,ConstantsI {
-    private Set<Map<String,String>> resultSet;
+public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
 
     boolean postingIsSuccessful = true; //for structure purpose
 
@@ -33,7 +32,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
     
 
     private void closeCpMarketWindow(){
-        Set<Map<String, String>> resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery(cpPrimaryMarket));
+        resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery(cpPrimaryMarket));
         System.out.println(resultSet);
         for (Map<String ,String> result : resultSet){
             String date = result.get("CLOSEDATE");

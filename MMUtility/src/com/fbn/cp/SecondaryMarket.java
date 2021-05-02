@@ -9,10 +9,8 @@ import com.fbn.utils.Commons;
 import com.fbn.utils.Query;
 import com.fbn.utils.ConstantsI;
 
-public class SecondaryMarket implements Runnable, ConstantsI {
-    private  final String sessionId;   
-    private Set<Map<String,String>> resultSet;
-
+public class SecondaryMarket extends Commons implements Runnable, ConstantsI {
+    private  final String sessionId;
     public SecondaryMarket(String sessionId) {
         this.sessionId = sessionId;
     }

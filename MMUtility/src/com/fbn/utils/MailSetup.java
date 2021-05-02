@@ -25,16 +25,19 @@ public class MailSetup {
 		this.mailTo = mailTo;
 		this.mailCc = mailCc;
 		this.mailSubject = mailSubject;
-		this.mailMessage = mailMessage;
+		this.mailMessage = setMailMessage(mailMessage);
+
+		sendMail();
+
 	}
 	
 	
 
-public void getSendMail() {
+private void sendMail() {
 	 new Controller().sendMail(sessionId, activityId, processInstanceId, mailFrom, mailTo, mailCc, mailSubject, mailMessage);
 	}
  
- public String setMailMessage(String mailMessage) {
+ private String setMailMessage(String mailMessage) {
     return this.mailMessage = "<html>" +
              "<body>" +
              "Dear User, <br>" +
@@ -43,7 +46,5 @@ public void getSendMail() {
              "</body>" +
              "</html>";
  }
- 
-	
 
 }

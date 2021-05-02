@@ -3,11 +3,10 @@ package com.fbn.utils;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.Properties;
 
 public class SocketService implements ConstantsI {
     private final String SocketIP = LoadProp.serverIp;
-    private final int SocketPort = Integer.parseInt(LoadProp.serverPort);
+    private final int SocketPort = Integer.parseInt(LoadProp.socketPort);
 
     public String executeIntegrationCall(String serviceName, String inputXml){
           String  requestXml = serviceName + "~" + inputXml + "~";

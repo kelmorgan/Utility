@@ -5,6 +5,7 @@ public interface ConstantsI {
 	
 	
 	String configPath = "";
+	String logPath = "";
 	//String wiName = "FBN-00000000000134-MMW";
 	String dbDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 	String flag = "Y";
@@ -42,8 +43,8 @@ public interface ConstantsI {
 	String userName = "FBNTreasuryUtilityUser";
 	String password = "system12345#";
 	String queueId = "1143";
-	String appServerIpLocal = "";
-	String appServerPortLocal = "";
+	String appServerIpField = "ServerIp";
+	String appSocketPortField = "SocketPort";
 
 
 	// API SERVICE NAMES

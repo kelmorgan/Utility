@@ -1,19 +1,12 @@
 package com.fbn.api.fbn.controller;
 
-public class Controller {
+import com.fbn.api.fbn.execute.Api;
+import com.fbn.api.fbn.generateXml.RequestXml;
+import com.fbn.utils.ConstantsI;
 
-	public String getTranID(){
-  
-        try {
-            //String OutputXml = Api.postCall();
-            
-           // xmlParser.setInputXML(OutputXml);
-            
-           // return xmlParser.getValueOf("TranId");
+public class Controller implements ConstantsI {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+	public String getUserLimit(){
+	    return Api.executeCall(fetchLimitServiceName, RequestXml.getUserLimitXml("SN022357"));
     }
 }
