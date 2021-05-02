@@ -64,5 +64,8 @@ public class Query {
     }
     public static String getfailedMatrtyPostTVerWiCreatedFlg(){
     	return "select refid, failedMatrtyPostTVerWiCreatedFlg from mm_setup_tbl where process = 'Treasury Bills' and markettype = 'primary'";
-    }   
+    } 
+    public static String getUsersInGroup(String groupName) {
+        return "select username from pdbuser where userindex in (select userindex from pdbgroupmember where groupindex = (select groupindex from PDBGroup where GroupName='" + groupName + "'))";
+    }
 }

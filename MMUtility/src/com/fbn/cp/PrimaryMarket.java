@@ -31,6 +31,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
         processAllPmBidsOnAwaitingMaturity();
     }
     
+
     private void closeCpMarketWindow(){
         Set<Map<String, String>> resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery(cpPrimaryMarket));
         System.out.println(resultSet);

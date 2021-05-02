@@ -4,8 +4,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
+import java.util.Set;
+import com.fbn.utils.Query;
+
+import com.fbn.api.newgen.controller.Controller;
 
 public class Commons implements ConstantsI{
+	
+	private Set<Map<String,String>> resultSet;
+	
     public static boolean isLeapYear (){
         return LocalDate.now().isLeapYear();
     }
@@ -27,5 +35,20 @@ public class Commons implements ConstantsI{
     public static boolean is7DaysToMaturity(String date){
         return ChronoUnit.DAYS.between(LocalDate.now(),LocalDate.parse(date)) == 7;
     }
+    
+    public String getUsersMailsInGroup(String groupName){
+        String username= "";
+        try {
+        	resultSet = new Controller().getRecords(Query.getUsersInGroup(groupName));
+        	for (Map<String ,String> result : resultSet){
+                username = result.get("USERNAME");
+        	}
+        }catch (Exception e){
+            
+            return null;
+        }
+      
+        return username.trim();
+    }
 
-}
+  }

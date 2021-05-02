@@ -10,6 +10,7 @@ public class Main extends Thread implements ConstantsI {
         this.sessionId = new Controller().getSessionId();
    }
     
+
     private void disconnectSession (){
         new Controller().disconnectSession(sessionId);
     }
@@ -17,6 +18,6 @@ public class Main extends Thread implements ConstantsI {
     public void run() {
         //closeMarketWindow();
         disconnectSession();
-       // new cpMain().run();
+        //new cpMain().run();
     }
 }
