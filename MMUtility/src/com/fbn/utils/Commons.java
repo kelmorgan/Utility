@@ -30,7 +30,7 @@ public class Commons implements ConstantsI{
         return LocalDate.now().isEqual(LocalDate.parse(date)) || LocalDate.now().isAfter(LocalDate.parse(date));
     }
     public static boolean isEmpty(String data){
-    	return data.equalsIgnoreCase(empty);
+    	return data.isEmpty();
     }
     public static boolean is7DaysToMaturity(String date){
         return ChronoUnit.DAYS.between(LocalDate.now(),LocalDate.parse(date)) == 7;
