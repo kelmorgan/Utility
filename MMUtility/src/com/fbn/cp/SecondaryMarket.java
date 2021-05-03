@@ -35,7 +35,7 @@ public class SecondaryMarket extends Commons implements Runnable, ConstantsI {
             String value = "'"+flag+"'";
             String condition = "refid = '"+id+"'";
 
-            if (Commons.compareDate(date)) {
+            if (Commons.compareDateTime(date)) {
                 new Controller().updateRecords(sessionId, Query.setupTblName, Query.stColCloseFlag, value, condition);
                 new CompleteWorkItem(sessionId,wiName,"CLOSEFLAG","Y");
             }
@@ -49,7 +49,7 @@ public class SecondaryMarket extends Commons implements Runnable, ConstantsI {
         for (Map<String, String> result : resultSet) {
         	    String date = result.get(investClosedate.toUpperCase());
         	    
-        	    if(Commons.compareDate(date)) {
+        	    if(Commons.compareDateTime(date)) {
         	    	String id = result.get(investID.toUpperCase());
         	    	String values = "'Y', 'Closed'";
                 	String condition = "INVESTMENTID = '"+id+"'";   	

@@ -21,9 +21,9 @@ public class Commons implements ConstantsI{
         return LocalDate.parse(date1).isEqual(LocalDate.parse(date2));
     }
     public static boolean compareDate(String startDate, String endDate){
-        return  LocalDateTime.parse(endDate, DateTimeFormatter.ofPattern(dbDateTimeFormat)).isBefore(LocalDateTime.parse(startDate,DateTimeFormatter.ofPattern(dbDateTimeFormat)));
+        return  LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dbDateTimeFormat)).isBefore(LocalDate.parse(startDate,DateTimeFormatter.ofPattern(dbDateTimeFormat)));
     }
-    public static boolean compareDate(String date){
+    public static boolean compareDateTime(String date){
         return LocalDateTime.now().isAfter(LocalDateTime.parse(date,DateTimeFormatter.ofPattern(dbDateTimeFormat)));       
     }
     public static boolean isMatured(String date){
@@ -35,20 +35,29 @@ public class Commons implements ConstantsI{
     public static boolean is7DaysToMaturity(String date){
         return ChronoUnit.DAYS.between(LocalDate.now(),LocalDate.parse(date)) == 7;
     }
-    
+    public static boolean isDaysToMaturity(String date, int days){
+        return ChronoUnit.DAYS.between(LocalDate.now(),LocalDate.parse(date)) == days;
+    }
+    public static String monthsFromNow(int numberOfMonths){
+        return LocalDate.now().minusMonths(numberOfMonths).toString();
+    }
+    public static String getCurrentDate(){
+        return LocalDate.now().toString();
+    }
+    public static String getCurrentDateTime(){
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(dbDateTimeFormat));
+    }
     public String getUsersMailsInGroup(String groupName){
         StringBuilder username= new StringBuilder();
         String domain = "@firstbanknigeria.com";
         try {
         	resultSet = new Controller().getRecords(Query.getUsersInGroup(groupName));
         	for (Map<String ,String> result : resultSet){
-                username.append(result.get("USERNAME")).append(domain).append(',');
+                username.append(result.get("USERNAME")).append(domain).append(",");
         	}
         }catch (Exception e){
             return null;
         }
-      
         return username.toString();
     }
-
   }

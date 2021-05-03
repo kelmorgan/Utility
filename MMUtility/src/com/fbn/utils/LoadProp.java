@@ -6,14 +6,16 @@ import java.io.*;
 import java.util.Properties;
 
 public class LoadProp implements ConstantsI {
-    private static Logger logger;
+    private static final Logger logger =  LogGen.getLoggerInstance("LoadProp");
     public static String serverIp;
     public static String socketPort;
+    public static String headOfficeCpAcctNo;
+    public static String headOfficeCpSol;
+    public static String utilityUser;
 
 
     static {
         try {
-            logger = LogGen.getLoggerInstance("LoadPropLogs");
             logger.info("Start loading properties file");
             Properties properties = new Properties();
             InputStream in = new FileInputStream(configPath);
@@ -22,6 +24,7 @@ public class LoadProp implements ConstantsI {
             logger.info("serverIp-- "+serverIp);
             socketPort = properties.getProperty(appSocketPortField);
             logger.info("socketPort-- "+socketPort);
+            logger.info("Done loading properties file");
         }
         catch (IOException ex){
             ex.printStackTrace();

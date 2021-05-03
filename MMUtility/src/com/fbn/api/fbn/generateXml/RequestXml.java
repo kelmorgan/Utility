@@ -5,7 +5,7 @@ public class RequestXml {
     public static String getUserLimitXml (String user){
         return "<USERID>"+user.toUpperCase()+"</USERID>";
     }
-    public String searchRequestXml (String startDate, String endDate, String acctNo, String amount, String debitCredit, String transParts){
+    public static String searchRequestXml (String startDate, String endDate, String acctNo, String amount, String debitCredit, String transParts){
 
         return "<executeFinacleScriptRequest>"
                 + "<ExecuteFinacleScriptInputVO>"
@@ -23,9 +23,9 @@ public class RequestXml {
                 + "</executeFinacleScriptRequest>";
     }
 
-    public String postTransactionXml(
+    public static String postTransactionXml(
             String transType, String tranSubType,String acct1, String sol1, String Debit, String amount, String currency,String transParticulars,
-            String partTranRemarks, String todayDateTime, String acct2, String sol2, String Credit, String logInUser)
+            String partTranRemarks, String todayDate, String acct2, String sol2, String Credit, String logInUser)
     {
 
 
@@ -48,7 +48,7 @@ public class RequestXml {
                         "</TrnAmt>" +
                         "<TrnParticulars>"+transParticulars+"</TrnParticulars>" +
                         "<PartTrnRmks>"+partTranRemarks+"</PartTrnRmks>" +
-                        "<ValueDt>"+todayDateTime+"T00:00:00.000</ValueDt>" +
+                        "<ValueDt>"+todayDate+"T00:00:00.000</ValueDt>" +
                         "</PartTrnRec>" +
                         "<PartTrnRec>" +
                         "<SerialNum>2</SerialNum>" +
@@ -61,7 +61,7 @@ public class RequestXml {
                         "</TrnAmt>" +
                         "<TrnParticulars>"+transParticulars+"</TrnParticulars>" +
                         "<PartTrnRmks>"+partTranRemarks+"</PartTrnRmks>" +
-                        "<ValueDt>"+todayDateTime+"T00:00:00.000</ValueDt>" +
+                        "<ValueDt>"+todayDate+"T00:00:00.000</ValueDt>" +
                         "</PartTrnRec>" +
                         "</XferTrnDetail>" +
                         "</XferTrnAddRq>" +

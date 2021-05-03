@@ -3,9 +3,21 @@ package com.fbn.utils;
 
 public interface ConstantsI {
 	
-	
-	String configPath = "C:\\Users\\sn029154\\Documents\\Work\\Project\\util\\config\\mmutility.properties";
-	String logPath = "C:\\Users\\sn029154\\Documents\\Work\\Project\\util\\logs";
+	//Variables
+
+	String apiSuccess = "SUCCESS";
+	String apiFailed = "FAILED";
+	String apiFailure = "FAILURE";
+	String False = "false";
+	String apiStatus = "Status";
+	String currencyNgn = "NGN";
+	String debitFlag = "D";
+	String creditFlag = "C";
+	String transType = "T";
+	String transSubTypeC = "CI";
+	String transSubTypeB = "BI";
+	String apiNoResponse = "No Response Found";
+
 	//String wiName = "FBN-00000000000134-MMW";
 	String dbDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 	String flag = "Y";
@@ -45,6 +57,8 @@ public interface ConstantsI {
 	String queueId = "1143";
 	String appServerIpField = "ServerIp";
 	String appSocketPortField = "SocketPort";
+	String configPath = "C:\\Users\\sn029154\\Documents\\Work\\Project\\util\\config\\mmutility.properties";
+	String logPath = "C:\\Users\\sn029154\\Documents\\Work\\Project\\util\\logs";
 
 
 	// API SERVICE NAMES

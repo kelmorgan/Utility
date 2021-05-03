@@ -36,7 +36,7 @@ public class PrimaryMarket implements Runnable,ConstantsI {
 	        for (Map<String ,String> result : resultSet){
 	        	 String date = result.get("CLOSEDATE");
 	        
-	        	 	if (Commons.compareDate(date)) {
+	        	 	if (Commons.compareDateTime(date)) {
 	        	        String id = result.get("REFID"); 
 	        	        String value = "'"+flag+"'";
 	        	        String condition = "refid = '"+id+"'";
