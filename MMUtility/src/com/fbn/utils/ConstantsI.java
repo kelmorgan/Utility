@@ -27,6 +27,7 @@ public interface ConstantsI {
 	String bidCustIdCol = "CUSTREFID";
 	String bidCustSolCol = "CUSTSOL";
 	String bidCustAcctNoCol = "CUSTACCTNO";
+	String bidCustEmail = "CUSTEMAIL";
 	String bidCustPrincipalCol = "CUSTPRINCIPAL";
 	String bidBranchSolCol = "BRANCHSOL";
 	String bidFailedFlagCol = "FAILEDFLAG";
@@ -38,8 +39,9 @@ public interface ConstantsI {
 	String bidAllocationPercentageCol = "ALLOCATIONPERCENTAGE";
 	String investClosedate = "closedate"; 
 	String investID = "investmentid";
-	String cpPrimaryMarket = "primary";
-	String cpSecondaryMarket = "secondary";
+	String primaryMarket = "primary";
+	String secondaryMarket = "secondary";
+	String fbnMailer = "fbnnotification@firstbanknigeria.com";
 
 	String tbCustAcctNo = "TB_CUSTACCTNUM";
 	String wiName = "WINAME";

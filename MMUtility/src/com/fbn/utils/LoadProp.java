@@ -11,6 +11,8 @@ public class LoadProp implements ConstantsI {
     public static String socketPort;
     public static String headOfficeCpAcctNo;
     public static String headOfficeCpSol;
+    public static String headOfficeTbAcctNo;
+    public static String headOfficeTbSol;
     public static String utilityUser;
 
 
@@ -24,6 +26,10 @@ public class LoadProp implements ConstantsI {
             logger.info("serverIp-- "+serverIp);
             socketPort = properties.getProperty(appSocketPortField);
             logger.info("socketPort-- "+socketPort);
+            headOfficeCpAcctNo = properties.getProperty(headOfficeCpAcctNo);
+            headOfficeCpSol = properties.getProperty(headOfficeCpSol);
+            headOfficeTbAcctNo = properties.getProperty(headOfficeTbAcctNo);
+            headOfficeTbSol = properties.getProperty(headOfficeTbSol);
             logger.info("Done loading properties file");
         }
         catch (IOException ex){

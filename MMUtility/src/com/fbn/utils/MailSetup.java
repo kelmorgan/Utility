@@ -5,7 +5,6 @@ import com.fbn.api.newgen.controller.Controller;
 public class MailSetup {
 	
 	private final String sessionId;
-	private final String activityId;
 	private final String processInstanceId;
 	private final String mailFrom;
 	private final String mailTo;
@@ -16,10 +15,9 @@ public class MailSetup {
 
 
 	
-	public MailSetup(String sessionId, String activityId, String processInstanceId, String mailFrom, String mailTo, String mailCc, String mailSubject, String mailMessage) {
+	public MailSetup(String sessionId, String processInstanceId, String mailFrom, String mailTo, String mailCc, String mailSubject, String mailMessage) {
 		
 		this.sessionId = sessionId;
-		this.activityId = activityId;
 		this.processInstanceId = processInstanceId;
 		this.mailFrom = mailFrom;
 		this.mailTo = mailTo;
@@ -34,7 +32,7 @@ public class MailSetup {
 	
 
 private void sendMail() {
-	 new Controller().sendMail(sessionId, activityId, processInstanceId, mailFrom, mailTo, mailCc, mailSubject, mailMessage);
+	 new Controller().sendMail(sessionId, "1", processInstanceId, mailFrom, mailTo, mailCc, mailSubject, mailMessage);
 	}
  
  private String setMailMessage(String mailMessage) {

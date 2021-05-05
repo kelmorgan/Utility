@@ -23,7 +23,7 @@ public class SecondaryMarket extends Commons implements Runnable, ConstantsI {
     }
 
     private void closeCpMarketWindow(){
-        Set<Map<String, String>> resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery(cpSecondaryMarket));
+        Set<Map<String, String>> resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery(secondaryMarket));
         System.out.println(resultSet);
         for (Map<String ,String> result : resultSet){
             String date = result.get("CLOSEDATE");

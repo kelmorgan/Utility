@@ -7,6 +7,7 @@ import com.fbn.utils.Commons;
 import com.fbn.utils.ConstantsI;
 import com.fbn.utils.LoadProp;
 import com.fbn.utils.Query;
+import com.fbn.utils.MailSetup;
 import java.util.Map;
 
 
@@ -28,12 +29,11 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
         processPostingFailureFailedBids();
         processSuccessfulBids();
         processPostingFailureSuccessBids();
-        processAllPmBidsOnAwaitingMaturity();
     }
     
 
     private void closeCpMarketWindow(){
-        resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery(cpPrimaryMarket));
+        resultSet = new Controller().getRecords(Query.getCpOpenWindowQuery(primaryMarket));
         System.out.println(resultSet);
         for (Map<String ,String> result : resultSet){
             String date = result.get("CLOSEDATE");
@@ -53,9 +53,13 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
     }
 
     private void  processPrimaryBids(){
+    	
         String attribute = "<CP_UTILITYFLAG>Y</CP_UTILITYFLAG>";
         String wiName = new CreateWorkItem(sessionId,attribute,initiateFlagNo).getCreatedWorkItem();
-        resultSet = new Controller().getRecords(Query.getCpPmBidsToProcessQuery());
+        String mailSubject = "MONEY MARKET NOTIFICATION - COMMERCIAL PAPER ";
+    	String mailMessage = "Commercial Paper Primary Bids with RefNumber: '"+wiName+"' are ready for processing.<br>Kindly login to iBPS treat.";
+        
+    	resultSet = new Controller().getRecords(Query.getCpPmBidsToProcessQuery()); 
         String columns = "utilitywiname,groupindex,groupindexflag,processflag";
         for (Map<String,String >result : resultSet){
             String id = result.get("CUSTREFID");
@@ -69,6 +73,8 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
             new Controller().updateRecords(sessionId,Query.bidTblName,columns,values,condition);
         }
        new CompleteWorkItem(sessionId,wiName);
+       //send mail to TUSer
+       new MailSetup(sessionId,wiName,fbnMailer,"TUSER",empty,mailSubject,mailMessage);
     }
     private String getCpGroupIndex(String wiName,String tenor,String rateType, String rate){
         String strPattern = "^0+(?!$)";
@@ -91,15 +97,19 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
     	String columnsF = "POSTINTEGRATIONFLAG,FAILEDPOSTFLAG";
     	String wiName;
     	String attribute = "FAILEDBID";
+    	String mailSubject = "MONEY MARKET NOTIFICATION - COMMERCIAL PAPER ";
+    	String mailMessage = "";
     	resultSet = new Controller().getRecords(Query.getCpAllocatedPrimaryBids("Y"));
     	for (Map<String,String> result : resultSet){
-             String id = result.get(bidCustIdCol.toUpperCase());
-             wiName = result.get(bidWinameCol.toUpperCase());
-             String cusSol = result.get(bidCustSolCol.toUpperCase());
-             String cusPrincipal = result.get(bidCustPrincipalCol.toUpperCase());
-             String branchSol = result.get(bidBranchSolCol.toUpperCase());
-             String cusAcctNo = result.get(bidCustAcctNoCol.toUpperCase());
-             String tranPart ="CP/"+id.toUpperCase()+"/REVERSAL";
+            String id = result.get(bidCustIdCol.toUpperCase());
+            wiName = result.get(bidWinameCol.toUpperCase());
+            String cusSol = result.get(bidCustSolCol.toUpperCase());
+            String cusPrincipal = result.get(bidCustPrincipalCol.toUpperCase());
+            String branchSol = result.get(bidBranchSolCol.toUpperCase());
+            String cusAcctNo = result.get(bidCustAcctNoCol.toUpperCase());
+            String cusEmail = result.get(bidCustEmail.toUpperCase());
+            String bidWiname = result.get(bidWinameCol.toUpperCase());
+            String tranPart ="CP/"+id.toUpperCase()+"/FAILEDBID";
             String values = "'Y', 'Y'";
             String condition = "CUSTREFID = '"+id+"'";
             postResp = new IntegrationCall().reverseFailedBids(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,cusPrincipal,tranPart,wiName,cusAcctNo,cusSol);
@@ -107,6 +117,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
                 new Controller().updateRecords(sessionId,Query.bidTblName,columnsS,values,condition);
                 new CompleteWorkItem(sessionId,wiName,attribute,flag);
                 //sentMailToCustomer
+                new MailSetup(sessionId,bidWiname,fbnMailer,cusEmail,empty,mailSubject,mailMessage);
              }
              else if (postingNotSuccessful(postResp)) {
                 new Controller().updateRecords(sessionId,Query.bidTblName,columnsF,values,condition);
@@ -129,6 +140,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
         }
  
     	new CompleteWorkItem(sessionId,wiName);
+    	 //send mail to TUSer
     }
     
     private void processSuccessfulBids() {
@@ -146,19 +158,24 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
             String allocationPercentage = result.get(bidAllocationPercentageCol.toUpperCase());
             String cusAcctNo = result.get(bidCustAcctNoCol.toUpperCase());
             String condition = "CUSTREFID = '"+id+"'";
-            String tranPart ="CP/"+id.toUpperCase()+"/SUCCESSBID";
+            String tranPart1 ="CP/"+id.toUpperCase()+"/REVERSAL";
+            String tranPart2 ="CP/"+id.toUpperCase()+"/SUCCESSBID";
 
 
-            postResp = new IntegrationCall().postSuccessBids(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,cusPrincipal,tranPart,wiName,cusAcctNo,cusSol,allocationPercentage);
+            postResp = new IntegrationCall().postSuccessBids(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,cusPrincipal,tranPart1,tranPart2,wiName,cusAcctNo,cusSol,allocationPercentage);
             if (postingIsSuccessful(postResp)) {
             String value = "'Y','Y'";
             new Controller().updateRecords(sessionId,Query.bidTblName,columnS,value,condition);
             new CompleteWorkItem(sessionId,wiName,attribute,flag);
             }
-            else {
-           	     String value = "'Y','Y'";  
+            else if (postResp.equalsIgnoreCase(apiFailed)){
+           	     String value = "'Y','C'";  
            	     new Controller().updateRecords(sessionId,Query.bidTblName,columnsF,value,condition);
     	    }
+            else if (postResp.equalsIgnoreCase(apiFailure)){
+          	     String value = "'Y','D'";  
+          	     new Controller().updateRecords(sessionId,Query.bidTblName,columnsF,value,condition);
+   	    }
          } 
     }
      
@@ -176,68 +193,40 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
         	new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
     	}
     	new CompleteWorkItem(sessionId,wiName);
+    	 //send mail to TUSer
     }
     
-    private void processAllPmBidsOnAwaitingMaturity() {
-    	resultSet = new Controller().getRecords(Query.getCpAllBidsOnMaturity());
-    	String wiName;
-    	String columns = "MATUREDFLAG, PAIDFLAG, POSTINTEGRATIONMATUREFLAG";
-        for (Map<String ,String> result : resultSet){
-        	    String date = result.get(bidmaturityDate.toUpperCase());
-          
-                if (Commons.isMatured(date)) {
-                	 String id = result.get(bidCustIdCol.toUpperCase());
-                     wiName = result.get(bidWinameCol.toUpperCase());
-                     String cusSol = result.get(bidCustSolCol.toUpperCase());
-                     String cusPrincipal = result.get(bidCustPrincipalCol.toUpperCase());
-                     String branchSol = result.get(bidBranchSolCol.toUpperCase());
-                     String allocationPercentage = result.get(bidAllocationPercentageCol.toUpperCase());
-                	
-                    //Perform all the neccessary posting
-                     
-                	String values = "'Y', 'Y', 'Y'";
-                	String condition = "CUSTREFID = '"+id+"'";
-                	new Controller().updateRecords(sessionId,Query.bidTblName,columns,values,condition);
-                    new CompleteWorkItem(sessionId,wiName);
-                }
-        }
-    }
+
     
     private void processBidsOnAwaitingMaturity() {
+    	String attribute = "MATURED";
+    	String mailSubject = "MONEY MARKET NOTIFICATION - COMMERCIAL PAPER ";
+    	String mailMessage = "";
     	resultSet = new Controller().getRecords(Query.getCpProcessBidsOnAwaitingMaturity());
-    	 for (Map<String, String> result : resultSet) {
+    	for (Map<String, String> result : resultSet) {
 			 	String id = result.get(bidCustIdCol);
+			 	String bidWiname = result.get(bidWinameCol.toUpperCase());
+			 	String cusEmail = result.get(bidCustEmail.toUpperCase());
 		    	String matureDate = result.get(bidmaturityDate);
 		    	String lienFlag = result.get(bidlienflag);
 		    	if (Commons.isDaysToMaturity(matureDate,7) && lienFlag == "Y") {
-		    		//send mail to branch and customer		
+		    		//send mail to branch and customer
+		    		//send mail to branch
+		    		new MailSetup(sessionId,bidWiname,fbnMailer,cusEmail,Commons.getUsersMailsInGroup("TUSERS"),mailSubject,mailMessage);
 		    	}
 		    	else {
 		    		if(Commons.isMatured(matureDate) && lienFlag.equalsIgnoreCase("N")) {
-		    				String column = "STATUS";
-		    				String value = "'Matured'";
+		    				String column = "STATUS,MATUREDFLAG";
+		    				String value = "'Matured', 'Y'";
 		    				String condition = "CUSTREFID = '"+id+"'";
 		                    new Controller().updateRecords(sessionId, Query.bidTblName, column, value, condition);
-		                    new CompleteWorkItem(sessionId,wiName);
+		                    new CompleteWorkItem(sessionId,wiName,attribute,flag);
 		    		}
                 }
 		 } 
     }
     
-    private void processPostingFailureOnMaturity() {
-    	String attribute = "<CP_UTILITYFLAG>M</CP_UTILITYFLAG>";
-    	String wiName = new CreateWorkItem(sessionId,attribute,initiateFlagNo).getCreatedWorkItem();
-    	String column = "FAILEDTRANUTILITYWINAME";
-    	String value = "'"+wiName+"'";
-    	
-    	resultSet = new Controller().getRecords(Query.getCpProcessPostingFailureSuccessBids("N"));
-    	for (Map<String,String> result : resultSet){
-        	String id = result.get(bidCustIdCol.toUpperCase());
-        	String condition = "CUSTREFID = '"+id+"'";
-        	new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
-    	}
-    	new CompleteWorkItem(sessionId,wiName);
-    }
+    
 
     private boolean postingIsSuccessful (String data){
         return data.equalsIgnoreCase(apiSuccess);

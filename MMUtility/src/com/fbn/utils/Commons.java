@@ -47,7 +47,7 @@ public class Commons implements ConstantsI{
     public static String getCurrentDateTime(){
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern(dbDateTimeFormat));
     }
-    public String getUsersMailsInGroup(String groupName){
+    public static String getUsersMailsInGroup(String groupName){
         StringBuilder username= new StringBuilder();
         String domain = "@firstbanknigeria.com";
         try {
