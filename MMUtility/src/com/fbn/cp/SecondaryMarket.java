@@ -5,21 +5,20 @@ import java.util.Set;
 
 import com.fbn.api.newgen.customservice.CompleteWorkItem;
 import com.fbn.api.newgen.controller.Controller;
-import com.fbn.utils.Commons;
-import com.fbn.utils.Query;
-import com.fbn.utils.ConstantsI;
+import com.fbn.api.newgen.customservice.CreateWorkItem;
+import com.fbn.utils.*;
 
-public class SecondaryMarket extends Commons implements Runnable, ConstantsI {
+public class SecondaryMarket extends Commons implements ConstantsI {
     private  final String sessionId;
+    private String postResp;
     public SecondaryMarket(String sessionId) {
         this.sessionId = sessionId;
     }
 
-    @Override
-    public void run() {
+
+    public void main() {
         closeCpMarketWindow();
     	closeSmInvestmentWindow();
-    	processAllSmBidsOnMaturity();
     }
 
     private void closeCpMarketWindow(){
@@ -59,32 +58,79 @@ public class SecondaryMarket extends Commons implements Runnable, ConstantsI {
         }
     	
     }
-    
-    private void processAllSmBidsOnMaturity() {	
-    	resultSet = new Controller().getRecords(Query.getCpAllBidsOnMaturity());
-    	String wiName = "";
-    	String columns = "MATUREDFLAG, PAIDFLAG, POSTINTEGRATIONMATUREFLAG";
-        for (Map<String ,String> result : resultSet){
-        	    String date = result.get(bidmaturityDate.toUpperCase());
-          
-                if (Commons.isMatured(date)) {
-                	 String id = result.get(bidCustIdCol.toUpperCase());
-                     wiName = result.get(bidWinameCol.toUpperCase());
-                     String custSol = result.get(bidCustSolCol.toUpperCase());
-                     String custPrincipal = result.get(bidCustPrincipalCol.toUpperCase());
-                     String branchSol = result.get(bidBranchSolCol.toUpperCase());
-                     String allocationPercentage = result.get(bidAllocationPercentageCol.toUpperCase());
-                	
-                    //Perform all the neccessary posting
-                     
-                	String values = "'Y', 'Y', 'Y'";
-                	String condition = "CUSTREFID = '"+id+"'";
-                	new Controller().updateRecords(sessionId,Query.bidTblName,columns,values,condition);
-                    new CompleteWorkItem(sessionId,wiName);
+
+    private void processBidsOnAwaitingMaturity() {
+        String mailMessageB = "Kindly be informed that your Commercial Paper request initiated from your branch on lien has matured, liaise with the customer to perfect your obligations to enable you access your funds.<br>Thanks for choosing First bank.";
+        String mailMessageC = "Kindly be informed that your Commercial Paper on Lien is 7 days to maturity, liaise with your branch to perfect your obligations to enable you access your funds.";
+        String attribute = "MATURED";
+        String mailSubject = "MONEY MARKET NOTIFICATION - COMMERCIAL PAPER ";
+
+        resultSet = new Controller().getRecords(Query.getCpProcessBidsOnAwaitingMaturity(secondaryMarket));
+        for (Map<String, String> result : resultSet) {
+            String id = result.get(bidCustIdCol);
+            String bidWiname = result.get(bidWinameCol.toUpperCase());
+            String cusEmail = result.get(bidCustEmail.toUpperCase());
+            String branchSol = result.get(bidBranchSolCol.toUpperCase());
+            String matureDate = result.get(bidmaturityDate);
+            String lienFlag = result.get(bidlienflag);
+            if (Commons.isDaysToMaturity(matureDate,7) && lienFlag.equalsIgnoreCase("Y")) {
+                //send mail to Money_Market_Branch Initiator and Money_Market_Branch_Verifier
+                new MailSetup(sessionId,bidWiname,fbnMailer,Commons.getUsersMailsInGroup("TUSERS_'"+branchSol+"'"),Commons.getUsersMailsInGroup("TUSERS_'"+branchSol+"'"),mailSubject,mailMessageB);
+                //send mail to Customer
+                new MailSetup(sessionId,bidWiname,fbnMailer,cusEmail,empty,mailSubject,mailMessageC);
+            }
+            else {
+                if(Commons.isMatured(matureDate) && lienFlag.equalsIgnoreCase("N")) {
+                    String column = "STATUS,MATUREDFLAG";
+                    String value = "'Matured', 'Y'";
+                    String condition = "CUSTREFID = '"+id+"'";
+                    new Controller().updateRecords(sessionId, Query.bidTblName, column, value, condition);
+                    new CompleteWorkItem(sessionId,bidWiname,attribute,flag);
                 }
+            }
         }
-    	
     }
-    
-    
+
+    private void processMatureSmBids(){
+        resultSet = new Controller().getRecords(Query.getCpMaturedBids(secondaryMarket));
+        for (Map<String , String> result : resultSet){
+            String id = result.get(bidCustIdCol);
+            String wiName = result.get(bidWinameCol);
+            String cusAcc = result.get(bidCustAcctNoCol);
+            String cusSol = result.get(bidCustSolCol);
+            String cusMail = result.get(bidCustEmail);
+            String principal = result.get(bidCustPrincipalCol);
+            String principalAtMaturity = result.get(bidPrincipalMaturityCol.toUpperCase());
+            String interest = result.get(bidInterestCol.toUpperCase());
+            String investmentType = result.get(bidInvestmentTypeCol.toUpperCase());
+            String tranPart ="CP/"+id.toUpperCase()+"/MATUREDBID";
+
+            if (investmentType.equalsIgnoreCase(investmentTypePrincipalInterest))
+                principalAtMaturity = String.valueOf(Double.parseDouble(principalAtMaturity) + Double.parseDouble(interest));
+
+
+            postResp = IntegrationCall.postTransaction(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,principalAtMaturity,tranPart,wiName,cusAcc,cusSol);
+        }
+    }
+    private void processPostFailedMatureSmBids(){
+        String attribute = "<CP_UTILITYFLAG>M</CP_UTILITYFLAG><G_SELECT_MARKET>cp_market</G_SELECT_MARKET><CP_SELECT_MARKET>"+secondaryMarket+"</CP_SELECT_MARKET>";
+        String wiName = new CreateWorkItem(sessionId,attribute,initiateFlagNo).getCreatedWorkItem();
+        String column = "FAILEDTRANUTILITYWINAME,FAILEDPOSTFLAG";
+        String value = "'"+wiName+"','T'";
+
+        resultSet = new Controller().getRecords(Query.getCpPostFailMaturityBids(secondaryMarket));
+        for (Map<String,String> result : resultSet){
+            String id = result.get(bidCustIdCol.toUpperCase());
+            String condition = "CUSTREFID = '"+id+"'";
+            new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
+        }
+        new CompleteWorkItem(sessionId,wiName);
+    }
+    private boolean postingIsSuccessful (String data){
+        return data.equalsIgnoreCase(apiSuccess);
+    }
+    private boolean postingNotSuccessful (String data){
+        return data.equalsIgnoreCase(apiFailed);
+    }
+
 }

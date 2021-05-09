@@ -39,11 +39,8 @@ public class Query {
     public static String getCpProcessPostingFailureSuccessBids(String flag) {
     	return "select custrefid from mm_bid_tbl where failedflag = '"+flag+"' and process = 'Commercial Paper' and markettype = 'primary' and allocatedflag ='Y' and postintegrationflag = 'Y' and (failedpostflag = 'C' or failedpostflag = 'D')";	  	
     }
-    public static String getCpProcessPostingFailureOnMaturity() {
-    	return "select custrefid from mm_bid_tbl where process = 'Commercial Paper' and markettype = 'primary' and maturityfailedpostflag = 'Y'";
-    }
-    public static String getCpAllBidsOnMaturity(){
-    	return "select custrefid, maturitydate, bidwiname, custsol,custacctno, custprincipal, branchsol,allocationpercentage from mm_bid_tbl Where ...";
+    public static String getCpPostFailMaturityBids(String marketType) {
+    	return "select custrefid from mm_bid_tbl where process = 'Commercial Paper' and markettype = '"+marketType+"' and postintegrationmatureflag = 'Y' and failedpostflag = 'Y' and maturedflag = 'Y'";
     }
     public static String getCpInvestmentClosedateTbl() {
     	return "select investmentid, closedate from mm_sminvestments_tbl"; 
@@ -57,8 +54,8 @@ public class Query {
     public static String getTbfailedRvsalsTOpsWiCreatedFlg() {
     	return "select refid, failedRvsalsTOpsWiCreatedFlg from mm_setup_tbl where process = 'Treasury Bills' and markettype = 'primary'";
     }
-    public static String getCpProcessBidsOnAwaitingMaturity(){
-    	return "select custrefid, bidwiname, maturitydate, custemail, branchsol, lienflag from mm_bid_tbl where awaitingmaturityflag = 'Y'  and failedpostflag = 'N'";
+    public static String getCpProcessBidsOnAwaitingMaturity(String marketType){
+    	return "select custrefid, bidwiname, maturitydate, custemail, branchsol, lienflag from mm_bid_tbl where markettype = '"+marketType+"' and awaitingmaturityflag = 'Y'  and failedpostflag = 'N'";
     }
     public static String getTbProcessBidsOnAwaitingMaturity(){
     	return "select winame, maturitydate, lienStatus from moneymarket_ext where g_currws = 'Awaiting_Maturity'";
@@ -74,5 +71,8 @@ public class Query {
     } 
     public static String getUsersInGroup(String groupName) {
         return "select username from pdbuser where userindex in (select userindex from pdbgroupmember where groupindex = (select groupindex from PDBGroup where GroupName='" + groupName + "'))";
+    }
+    public static  String getCpMaturedBids(String marketType){
+	    return "select custacctno, custsol, custemail, custprincipal, principalatmaturity, interest, investmenttype from mm_bid_tbl where markettype = '"+marketType+"' and  maturedflag = 'Y' and postintegrationmatureflag = 'N' and lienflag = 'N'";
     }
 }

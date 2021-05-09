@@ -17,6 +17,8 @@ public interface ConstantsI {
 	String transSubTypeC = "CI";
 	String transSubTypeB = "BI";
 	String apiNoResponse = "No Response Found";
+	String investmentTypePrincipal ="Principal";
+	String investmentTypePrincipalInterest ="Principal+Interest";
 
 	//String wiName = "FBN-00000000000134-MMW";
 	String dbDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
@@ -37,11 +39,14 @@ public interface ConstantsI {
 	String bidmaturityDate = "MATURITYDATE";
 	String bidlienflag = "LIENFLAG";
 	String bidAllocationPercentageCol = "ALLOCATIONPERCENTAGE";
-	String investClosedate = "closedate"; 
+	String bidPrincipalMaturityCol ="principalatmaturity";
+	String bidInterestCol ="interest";
+	String bidInvestmentTypeCol ="investmenttype";
+	String investClosedate = "closedate";
 	String investID = "investmentid";
 	String primaryMarket = "primary";
 	String secondaryMarket = "secondary";
-	String fbnMailer = "fbnnotification@firstbanknigeria.com";
+	String fbnMailer = "FirstBank@firstbanknigeria.com";
 
 	String tbCustAcctNo = "TB_CUSTACCTNUM";
 	String wiName = "WINAME";

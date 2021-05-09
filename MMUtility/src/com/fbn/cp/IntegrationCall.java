@@ -43,7 +43,7 @@ public class IntegrationCall implements ConstantsI {
             else return apiFailure;
         }
         }
-        return null;
+        return empty;
     }
 
     private static boolean isSearchSuccess(String data){
