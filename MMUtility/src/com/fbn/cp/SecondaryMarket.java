@@ -45,13 +45,13 @@ public class SecondaryMarket extends Commons implements Runnable, ConstantsI {
     private void closeSmInvestmentWindow() {
     	
         resultSet = new Controller().getRecords(Query.getCpInvestmentClosedateTbl());
-        String columns = "CLOSEDFLAG, STATUS";     
+        String columns = "CLOSEDFLAG, STATUS, MATURED";     
         for (Map<String, String> result : resultSet) {
         	    String date = result.get(investClosedate.toUpperCase());
         	    
         	    if(Commons.compareDateTime(date)) {
         	    	String id = result.get(investID.toUpperCase());
-        	    	String values = "'Y', 'Closed'";
+        	    	String values = "'Y', 'Closed', 'Y'";
                 	String condition = "INVESTMENTID = '"+id+"'";   	
                 	new Controller().updateRecords(sessionId,Query.investmentTblName,columns,values,condition);
         	    	

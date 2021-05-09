@@ -57,7 +57,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
         String attribute = "<CP_UTILITYFLAG>Y</CP_UTILITYFLAG>";
         String wiName = new CreateWorkItem(sessionId,attribute,initiateFlagNo).getCreatedWorkItem();
         String mailSubject = "MONEY MARKET NOTIFICATION - COMMERCIAL PAPER ";
-    	String mailMessage = "Commercial Paper Primary Bids with RefNumber: '"+wiName+"' are ready for processing.<br>Kindly login to iBPS treat.";
+    	String mailMessage = "Commercial Paper Primary Bids with RefNumber: '"+wiName+"' are ready for processing.<br>Kindly login iBPS treat.";
         
     	resultSet = new Controller().getRecords(Query.getCpPmBidsToProcessQuery()); 
         String columns = "utilitywiname,groupindex,groupindexflag,processflag";
@@ -74,7 +74,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
         }
        new CompleteWorkItem(sessionId,wiName);
        //send mail to TUSer
-       new MailSetup(sessionId,wiName,fbnMailer,"TUSER",empty,mailSubject,mailMessage);
+       new MailSetup(sessionId,wiName,fbnMailer,Commons.getUsersMailsInGroup("TUSERS"),empty,mailSubject,mailMessage);
     }
     private String getCpGroupIndex(String wiName,String tenor,String rateType, String rate){
         String strPattern = "^0+(?!$)";
@@ -98,7 +98,6 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
     	String wiName;
     	String attribute = "FAILEDBID";
     	String mailSubject = "MONEY MARKET NOTIFICATION - COMMERCIAL PAPER ";
-    	String mailMessage = "";
     	resultSet = new Controller().getRecords(Query.getCpAllocatedPrimaryBids("Y"));
     	for (Map<String,String> result : resultSet){
             String id = result.get(bidCustIdCol.toUpperCase());
@@ -112,21 +111,26 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
             String tranPart ="CP/"+id.toUpperCase()+"/FAILEDBID";
             String values = "'Y', 'Y'";
             String condition = "CUSTREFID = '"+id+"'";
-            postResp = new IntegrationCall().reverseFailedBids(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,cusPrincipal,tranPart,wiName,cusAcctNo,cusSol);
+            postResp = IntegrationCall.postTransaction(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,cusPrincipal,tranPart,wiName,cusAcctNo,cusSol);
             if (postingIsSuccessful(postResp)) {
                 new Controller().updateRecords(sessionId,Query.bidTblName,columnsS,values,condition);
                 new CompleteWorkItem(sessionId,wiName,attribute,flag);
-                //sentMailToCustomer
-                new MailSetup(sessionId,bidWiname,fbnMailer,cusEmail,empty,mailSubject,mailMessage);
+                //sentMail
+                String mailMessageS = "A successful reversal request for failed Primary Market Commercial Paper with number '"+wiName+"' now being reversed successfully.";
+                new MailSetup(sessionId,bidWiname,fbnMailer,Commons.getUsersMailsInGroup("TUSERS"),empty,mailSubject,mailMessageS);
              }
              else if (postingNotSuccessful(postResp)) {
                 new Controller().updateRecords(sessionId,Query.bidTblName,columnsF,values,condition);
+                //sentMail
+                String mailMessageF = "A reversal request for failed Primary Market Commercial Paper with number '"+wiName+"' has failed posting.<br>Please log into the iBPS workflow to execute action ";
+                new MailSetup(sessionId,bidWiname,fbnMailer,Commons.getUsersMailsInGroup("TUSERS"),empty,mailSubject,mailMessageF);
              }
         }
     }
     
     
     private void processPostingFailureFailedBids() {
+    	String mailSubject = "MONEY MARKET NOTIFICATION - COMMERCIAL PAPER ";
     	String attribute = "<CP_UTILITYFLAG>F</CP_UTILITYFLAG>";
     	String wiName = new CreateWorkItem(sessionId,attribute,initiateFlagNo).getCreatedWorkItem();
     	String column = "FAILEDTRANUTILITYWINAME";
@@ -141,6 +145,8 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
  
     	new CompleteWorkItem(sessionId,wiName);
     	 //send mail to TUSer
+    	String mailMessage = "Kindly login to post transactions Utility failed to post for failed Primary Market Commercial Paper with Workitem number '"+wiName+"'";
+        new MailSetup(sessionId,wiName,fbnMailer,Commons.getUsersMailsInGroup("TUSERS"),empty,mailSubject,mailMessage);
     }
     
     private void processSuccessfulBids() {
@@ -181,6 +187,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
      
 
     private void processPostingFailureSuccessBids() {
+    	String mailSubject = "MONEY MARKET NOTIFICATION - COMMERCIAL PAPER";
     	String attribute = "<CP_UTILITYFLAG>S</CP_UTILITYFLAG>";
     	String wiName = new CreateWorkItem(sessionId,attribute,initiateFlagNo).getCreatedWorkItem();
     	String column = "FAILEDTRANUTILITYWINAME";
@@ -193,26 +200,32 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
         	new Controller().updateRecords(sessionId,Query.bidTblName,column,value,condition);
     	}
     	new CompleteWorkItem(sessionId,wiName);
-    	 //send mail to TUSer
+    	//send mail to TUSer
+    	String mailMessage = "Kindly login to post transactions Utility failed to post for Success bids Primary Market Commercial Paper with Workitem number '"+wiName+"'";
+        new MailSetup(sessionId,wiName,fbnMailer,Commons.getUsersMailsInGroup("TUSERS"),empty,mailSubject,mailMessage);
     }
     
 
     
     private void processBidsOnAwaitingMaturity() {
+    	String mailMessageB = "Kindly be informed that your Commercial Paper request initiated from your branch on lien has matured, liaise with the customer to perfect your obligations to enable you access your funds.<br>Thanks for choosing First bank.";
+    	String mailMessageC = "Kindly be informed that your Commercial Paper on Lien is 7 days to maturity, liaise with your branch to perfect your obligations to enable you access your funds.";
     	String attribute = "MATURED";
     	String mailSubject = "MONEY MARKET NOTIFICATION - COMMERCIAL PAPER ";
-    	String mailMessage = "";
+   
     	resultSet = new Controller().getRecords(Query.getCpProcessBidsOnAwaitingMaturity());
     	for (Map<String, String> result : resultSet) {
 			 	String id = result.get(bidCustIdCol);
 			 	String bidWiname = result.get(bidWinameCol.toUpperCase());
 			 	String cusEmail = result.get(bidCustEmail.toUpperCase());
+			 	String branchSol = result.get(bidBranchSolCol.toUpperCase());
 		    	String matureDate = result.get(bidmaturityDate);
 		    	String lienFlag = result.get(bidlienflag);
 		    	if (Commons.isDaysToMaturity(matureDate,7) && lienFlag == "Y") {
-		    		//send mail to branch and customer
-		    		//send mail to branch
-		    		new MailSetup(sessionId,bidWiname,fbnMailer,cusEmail,Commons.getUsersMailsInGroup("TUSERS"),mailSubject,mailMessage);
+		    		//send mail to Money_Market_Branch Initiator and Money_Market_Branch_Verifier 
+		    		new MailSetup(sessionId,bidWiname,fbnMailer,Commons.getUsersMailsInGroup("TUSERS_'"+branchSol+"'"),Commons.getUsersMailsInGroup("TUSERS_'"+branchSol+"'"),mailSubject,mailMessageB);
+		    		//send mail to Customer
+		    		new MailSetup(sessionId,bidWiname,fbnMailer,cusEmail,empty,mailSubject,mailMessageC);
 		    	}
 		    	else {
 		    		if(Commons.isMatured(matureDate) && lienFlag.equalsIgnoreCase("N")) {

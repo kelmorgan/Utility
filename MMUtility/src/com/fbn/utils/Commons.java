@@ -56,7 +56,7 @@ public class Commons implements ConstantsI{
                 username.append(result.get("USERNAME")).append(domain).append(",");
         	}
         }catch (Exception e){
-            return null;
+            return empty;
         }
         return username.toString();
     }

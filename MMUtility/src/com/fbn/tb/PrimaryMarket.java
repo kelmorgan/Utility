@@ -62,14 +62,14 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
 		    for (Map<String, String> result : resultSet) {	
 		    	String custAcctNo = result.get(tbCustAcctNo);
 		    	String id = result.get(wiName);
-		    	String tbStatus = result.get("TB_STATUS"); //create this variable on MoneyMarket_EXT
+		    	String tbStatus = result.get("TB_STATUS");
                 String custSol = result.get("_CUSTSOL"); //change to correct field
                 String custPrincipal = result.get("_CSPRINCIPAL"); //change to correct field
                 String tranPart ="TB/"+id.toUpperCase()+"/PRINCIPAL";
               	
                 //Unlien customer's principal
 		        //debit customer with the principal value
-                postResp = new IntegrationCall().reverseFailedBids(custAcctNo,custSol,custPrincipal,tranPart,id,LoadProp.headOfficeTbAcctNo,LoadProp.headOfficeTbSol);
+                postResp = new IntegrationCall().postTransaction(custAcctNo,custSol,custPrincipal,tranPart,id,LoadProp.headOfficeTbAcctNo,LoadProp.headOfficeTbSol);
  
                 if (postingIsSuccessful(postResp)) {
                 	String values = "'Approve', 'N'";
@@ -111,7 +111,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
 		        String mailSubject = "MONEY MARKET NOTIFICATION - TREASURY BILLS";
 	    	    String mailMessage = "";
 	    	    //String columnS = "TB_CUSTACTREVERSEDFLG";
-	    	    String columnF = "TB_CUSTPRNCPLREVERSEDFLG";
+	    	    String column = "TB_CUSTPRNCPLREVERSEDFLG";
 	    	    resultSet = new Controller().getRecords(Query.getTbAllocatedPrimaryBids("Failed")); //get all workitems with "Failed" bidstatus
 	    	    for (Map<String,String> result : resultSet){
 	    		String custAcctNo = result.get(tbCustAcctNo);
@@ -122,19 +122,20 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
                 String tranPart ="TB/"+id.toUpperCase()+"/FAILEDBID";
 
 	            //perform reversal
-                postResp = new IntegrationCall().reverseFailedBids(LoadProp.headOfficeTbAcctNo,LoadProp.headOfficeTbSol,custPrincipal,tranPart,id,custAcctNo,custSol);
+                postResp = new IntegrationCall().postTransaction(LoadProp.headOfficeTbAcctNo,LoadProp.headOfficeTbSol,custPrincipal,tranPart,id,custAcctNo,custSol);
                 
                 //Send notification to customer
                 new MailSetup(sessionId,id,fbnMailer,cusEmail,Commons.getUsersMailsInGroup("TUSERS"),mailSubject,mailMessage);
+                
                 if (postingIsSuccessful(postResp)) { 
 	             String values = "'Y'";
 	             String condition = "winame = '"+id+"'";
-	             new Controller().updateRecords(sessionId,Query.extTblName,columnF,values,condition);         
+	             new Controller().updateRecords(sessionId,Query.extTblName,column,values,condition);         
 	             }
 	             else {
 	            	 String values = "'N'";
 	            	 String condition = "winame = '"+id+"'";
-	            	 new Controller().updateRecords(sessionId,Query.extTblName,columnF,values,condition);
+	            	 new Controller().updateRecords(sessionId,Query.extTblName,column,values,condition);
 	             }
 	        }
 	    }
@@ -144,7 +145,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
 		    String mailSubject = "MONEY MARKET NOTIFICATION - TREASURY BILLS";
  	        String mailMessage = "";
 	    	//String columnS = "TB_CUSTACTREVERSEDFLG";
-	    	String columnF = "TB_CUSTPRNCPLREVERSEDFLG";
+	    	String column1 = "TB_CUSTPRNCPLREVERSEDFLG";
 	    	String columnC = "tb_custBidDebitedFlg";
 	    	String attribute = "FAILEDBID";
 	    	resultSet = new Controller().getRecords(Query.getTbAllocatedPrimaryBids("Success")); //get all workitems with Success bidstatus
@@ -155,8 +156,8 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
                 String custSol = result.get(""); //change the field to the correct name
                 String custPrincipal = result.get("_CUSTPRINCIPAL"); //change the field to the correct name
                 String allocationPercentage = result.get("_ALLPERCENTAGE"); //change the field to the correct name
-                String tranPart1 ="CP/"+id.toUpperCase()+"/REVERSAL";
-                String tranPart2 ="CP/"+id.toUpperCase()+"/SUCCESSBID";
+                String tranPart1 ="TB/"+id.toUpperCase()+"/REVERSAL";
+                String tranPart2 ="TB/"+id.toUpperCase()+"/SUCCESSBID";
                 
                 String condition = "winame = '"+id+"'";
 
@@ -165,7 +166,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
                  // send notification to customer
                  new MailSetup(sessionId,id,fbnMailer,cusEmail,Commons.getUsersMailsInGroup("TUSERS"),mailSubject,mailMessage);
 	             String value = "'Y'";           
-	             new Controller().updateRecords(sessionId,Query.extTblName,columnF,value,condition); 
+	             new Controller().updateRecords(sessionId,Query.extTblName,column1,value,condition); 
 	             }
                  else if (postResp.equalsIgnoreCase(apiFailed)){
               	     String value = "'C'";  
@@ -179,7 +180,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
        	         }
 	             else {
 	            	 String values = "'N'";
-	            	 new Controller().updateRecords(sessionId,Query.extTblName,columnF,values,condition);
+	            	 new Controller().updateRecords(sessionId,Query.extTblName,column1,values,condition);
 	            	 new CompleteWorkItem(sessionId,id); //complete workitem
 	             }
 	                   
@@ -243,7 +244,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
 			 if(lienStatus.equalsIgnoreCase("N")) {
 				 
 				 //perform posting credit the principal or the interest to the customer based on *
-				 postResp = new IntegrationCall().reverseFailedBids(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,cusPrincipal,tranPart,id,cusAcctNo,cusSol);
+				 postResp = new IntegrationCall().postTransaction(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,cusPrincipal,tranPart,id,cusAcctNo,cusSol);
 				 
 				 if (postingIsSuccessful(postResp)) {			 
 				 }

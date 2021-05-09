@@ -25,7 +25,7 @@ public class Query {
         return "select custrefid, tenor, rate, ratetype from mm_bid_tbl where process = 'Commercial Paper' and markettype= 'primary' and processflag ='N' and groupindexflag = 'N'";
     }
     public static String getTbWorkitemsOnTreasuryUtilityWS() {
-    	return "select winame, tb_custAcctNum, tb_custAcctEmail, tb_custAcctEmail, tb_schemecode,tb_BrnchPri_LienID, tb_status from MoneyMarket_ext where g_currws = 'Treasury_Utility' and assign = 'TreasuryUtility'";
+    	return "select winame, tb_custAcctNum, tb_custAcctEmail, tb_schemecode,tb_BrnchPri_LienID, tb_status from MoneyMarket_ext where g_currws = 'Treasury_Utility' and assign = 'TreasuryUtility'";
     }
     public static String getCpAllocatedPrimaryBids(String flag) {
     	return "select custrefid, bidwiname, custsol,custacctno,custemail custprincipal, branchsol,allocationpercentage from mm_bid_tbl where failedflag = '"+flag+"' and process = 'Commercial Paper' and markettype = 'primary' and allocatedflag ='Y'";
@@ -52,7 +52,7 @@ public class Query {
     	return "select winame, closedate from tb_smissuedbills_tbl";
     }
     public static String getTbfailedAtTUtilWiCreatedFlg() {
-    	return "select refid, failedAtTUtilWiCreatedFlg from mm_setup_tbl where process = 'Treasury Bills' and markettype = 'primary' TB_FAILEDATTREASURYUTILITYFLG";
+    	return "select refid, failedAtTUtilWiCreatedFlg from mm_setup_tbl where process = 'Treasury Bills' and markettype = 'primary'";
     }
     public static String getTbfailedRvsalsTOpsWiCreatedFlg() {
     	return "select refid, failedRvsalsTOpsWiCreatedFlg from mm_setup_tbl where process = 'Treasury Bills' and markettype = 'primary'";

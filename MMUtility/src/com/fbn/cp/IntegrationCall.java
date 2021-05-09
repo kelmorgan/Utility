@@ -5,12 +5,12 @@ import com.fbn.utils.Commons;
 import com.fbn.utils.ConstantsI;
 
 public class IntegrationCall implements ConstantsI {
-    private String searchResp;
-    private String postResp;
-    private final String startDate = Commons.monthsFromNow(6);
-    private final String endDate = Commons.getCurrentDate();
+    private static String searchResp;
+    private static String postResp;
+    private static final String startDate = Commons.monthsFromNow(6);
+    private static final String endDate = Commons.getCurrentDate();
     
-    public String reverseFailedBids(String debitAcct,String debitSol,String amount,String transParts,String remarks,String creditAcct,String creditSol){
+    public static String postTransaction(String debitAcct,String debitSol,String amount,String transParts,String remarks,String creditAcct,String creditSol){
         searchResp = new Controller().getSearchTxn(startDate,endDate,debitAcct,amount,debitFlag,transParts);
         if (isSearchSuccess(searchResp)){
             postResp = new Controller().getPostTxn(debitAcct,debitSol,amount,transParts,remarks,Commons.getCurrentDate(),creditAcct,creditSol);
@@ -20,7 +20,7 @@ public class IntegrationCall implements ConstantsI {
         return null;
     }
 
-    public String postSuccessBids(String debitAcct,String debitSol,String amount,String transParts1,String transPart2,String remarks,String creditAcct,String creditSol,String allocationPercentage){
+    public static String postSuccessBids(String debitAcct,String debitSol,String amount,String transParts1,String transPart2,String remarks,String creditAcct,String creditSol,String allocationPercentage){
        //Posting reversal to customer
 
         searchResp = new Controller().getSearchTxn(startDate,endDate,debitAcct,amount,debitFlag,transParts1);
@@ -46,10 +46,10 @@ public class IntegrationCall implements ConstantsI {
         return null;
     }
 
-    private boolean isSearchSuccess(String data){
+    private static boolean isSearchSuccess(String data){
         return data.equalsIgnoreCase(False);
     }
-    private boolean isPostSuccess(String data){
+    private static boolean isPostSuccess(String data){
         return data.equalsIgnoreCase(apiSuccess);
     }
 }
