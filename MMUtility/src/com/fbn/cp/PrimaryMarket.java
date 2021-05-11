@@ -30,6 +30,9 @@ public class PrimaryMarket extends Commons implements ConstantsI {
         processPostingFailureFailedBids();
         processSuccessfulBids();
         processPostingFailureSuccessBids();
+        processBidsOnAwaitingMaturity();
+        processMaturePmBids();
+        processPostFailedMaturePmBids();
     }
     
 
@@ -237,8 +240,10 @@ public class PrimaryMarket extends Commons implements ConstantsI {
     }
 
     private void processMaturePmBids(){
+    	String mailSubject = "MONEY MARKET NOTIFICATION - COMMERCIAL PAPER ";
         String columnsS = "POSTINTEGRATIONMATUREFLAG,PAIDFLAG";
         String columnsF = "POSTINTEGRATIONMATUREFLAG,FAILEDPOSTFLAG";
+        String attribute = "MATURED";
         resultSet = new Controller().getRecords(Query.getCpMaturedBids(primaryMarket));
         for (Map<String , String> result : resultSet){
             String id = result.get(bidCustIdCol);
@@ -247,16 +252,30 @@ public class PrimaryMarket extends Commons implements ConstantsI {
             String cusSol = result.get(bidCustSolCol);
             String cusMail = result.get(bidCustEmail);
             String principal = result.get(bidCustPrincipalCol);
+            String rate = result.get(bidRate);
             String principalAtMaturity = result.get(bidPrincipalMaturityCol.toUpperCase());
             String interest = result.get(bidInterestCol.toUpperCase());
             String investmentType = result.get(bidInvestmentTypeCol.toUpperCase());
             String tranPart ="CP/"+id.toUpperCase()+"/MATUREDBID";
+            
+            String values = "'Y', 'Y'";
+            String condition = "CUSTREFID = '"+id+"'";
 
             if (investmentType.equalsIgnoreCase(investmentTypePrincipalInterest))
                 principalAtMaturity = String.valueOf(Double.parseDouble(principalAtMaturity) + Double.parseDouble(interest));
-
-
-            postResp = IntegrationCall.postTransaction(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,principalAtMaturity,tranPart,wiName,cusAcc,cusSol);
+                postResp = IntegrationCall.postTransaction(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,principalAtMaturity,tranPart,wiName,cusAcc,cusSol);
+               
+                if (postingIsSuccessful(postResp)) {
+                   new Controller().updateRecords(sessionId,Query.bidTblName,columnsS,values,condition);
+                   new CompleteWorkItem(sessionId,wiName,attribute,flag);
+                   String mailMessageS = "We wish to inform you that your Commercial Paper of N'"+principalAtMaturity+"' with reference number '"+id+"' at '"+rate+"'% has matured. Depending on your instruction, your funds should be credited to your account shortly.<br>Thank you for choosing First Bank.";
+                   new MailSetup(sessionId,wiName,fbnMailer,cusMail,empty,mailSubject,mailMessageS);
+                 }
+                 else if (postingNotSuccessful(postResp)) {
+                    new Controller().updateRecords(sessionId,Query.bidTblName,columnsF,values,condition);
+                    String mailMessage = "Kindly login to post transactions Utility failed to post for Matured Primary Market Commercial Paper with Workitem number '"+wiName+"'";
+                    new MailSetup(sessionId,wiName,fbnMailer,Commons.getUsersMailsInGroup("TUSERS"),empty,mailSubject,mailMessage);
+                 }
         }
     }
 

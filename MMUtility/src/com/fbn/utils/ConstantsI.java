@@ -31,6 +31,7 @@ public interface ConstantsI {
 	String bidCustAcctNoCol = "CUSTACCTNO";
 	String bidCustEmail = "CUSTEMAIL";
 	String bidCustPrincipalCol = "CUSTPRINCIPAL";
+	String bidRate = "RATE";
 	String bidBranchSolCol = "BRANCHSOL";
 	String bidFailedFlagCol = "FAILEDFLAG";
 	String bidMarketTypeCol = "MARKETTYPE";

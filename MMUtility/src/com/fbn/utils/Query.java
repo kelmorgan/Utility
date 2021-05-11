@@ -73,6 +73,6 @@ public class Query {
         return "select username from pdbuser where userindex in (select userindex from pdbgroupmember where groupindex = (select groupindex from PDBGroup where GroupName='" + groupName + "'))";
     }
     public static  String getCpMaturedBids(String marketType){
-	    return "select custacctno, custsol, custemail, custprincipal, principalatmaturity, interest, investmenttype from mm_bid_tbl where markettype = '"+marketType+"' and  maturedflag = 'Y' and postintegrationmatureflag = 'N' and lienflag = 'N'";
+	    return "select custacctno, custsol, custemail, custprincipal, principalatmaturity, rate, interest, investmenttype from mm_bid_tbl where markettype = '"+marketType+"' and  maturedflag = 'Y' and postintegrationmatureflag = 'N' and lienflag = 'N'";
     }
 }

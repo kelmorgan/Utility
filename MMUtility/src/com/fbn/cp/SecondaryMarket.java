@@ -19,6 +19,9 @@ public class SecondaryMarket extends Commons implements ConstantsI {
     public void main() {
         closeCpMarketWindow();
     	closeSmInvestmentWindow();
+    	processBidsOnAwaitingMaturity();
+    	processMatureSmBids();
+    	processPostFailedMatureSmBids();
     }
 
     private void closeCpMarketWindow(){
@@ -92,6 +95,11 @@ public class SecondaryMarket extends Commons implements ConstantsI {
     }
 
     private void processMatureSmBids(){
+    	String mailSubject = "MONEY MARKET NOTIFICATION - COMMERCIAL PAPER ";
+        String columnsS = "POSTINTEGRATIONMATUREFLAG,PAIDFLAG";
+        String columnsF = "POSTINTEGRATIONMATUREFLAG,FAILEDPOSTFLAG";
+        String attribute = "MATURED";
+        
         resultSet = new Controller().getRecords(Query.getCpMaturedBids(secondaryMarket));
         for (Map<String , String> result : resultSet){
             String id = result.get(bidCustIdCol);
@@ -100,16 +108,29 @@ public class SecondaryMarket extends Commons implements ConstantsI {
             String cusSol = result.get(bidCustSolCol);
             String cusMail = result.get(bidCustEmail);
             String principal = result.get(bidCustPrincipalCol);
+            String rate = result.get(bidRate);
             String principalAtMaturity = result.get(bidPrincipalMaturityCol.toUpperCase());
             String interest = result.get(bidInterestCol.toUpperCase());
             String investmentType = result.get(bidInvestmentTypeCol.toUpperCase());
             String tranPart ="CP/"+id.toUpperCase()+"/MATUREDBID";
+            
+            String values = "'Y', 'Y'";
+            String condition = "CUSTREFID = '"+id+"'";
 
             if (investmentType.equalsIgnoreCase(investmentTypePrincipalInterest))
                 principalAtMaturity = String.valueOf(Double.parseDouble(principalAtMaturity) + Double.parseDouble(interest));
-
-
-            postResp = IntegrationCall.postTransaction(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,principalAtMaturity,tranPart,wiName,cusAcc,cusSol);
+                postResp = IntegrationCall.postTransaction(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,principalAtMaturity,tranPart,wiName,cusAcc,cusSol);
+                if (postingIsSuccessful(postResp)) {
+                   new Controller().updateRecords(sessionId,Query.bidTblName,columnsS,values,condition);
+                   new CompleteWorkItem(sessionId,wiName,attribute,flag);
+                   String mailMessageS = "";
+                    new MailSetup(sessionId,wiName,fbnMailer,Commons.getUsersMailsInGroup("TUSERS"),empty,mailSubject,mailMessageS);
+                 }
+                 else if (postingNotSuccessful(postResp)) {
+                    new Controller().updateRecords(sessionId,Query.bidTblName,columnsF,values,condition);
+                    String mailMessageF = "";
+                    new MailSetup(sessionId,wiName,fbnMailer,Commons.getUsersMailsInGroup("TUSERS"),empty,mailSubject,mailMessageF);
+                 }
         }
     }
     private void processPostFailedMatureSmBids(){
