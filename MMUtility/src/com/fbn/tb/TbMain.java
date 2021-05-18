@@ -1,6 +1,5 @@
 package com.fbn.tb;
 
-import com.fbn.cp.PrimaryMarket;
 
 public class TbMain implements Runnable {
 	private final String sessionId;
@@ -11,8 +10,11 @@ public class TbMain implements Runnable {
 	
 	@Override
 	public void run() {
-	     // new PrimaryMarket(sessionId).run();
-	     // new SecondaryMarket(sessionId).run();
+	   execute();
 	}
 
+	private void execute (){
+		new PrimaryMarket(sessionId).main();
+		new SecondaryMarket(sessionId).main();
+	}
 }

@@ -1,23 +1,43 @@
 package com.fbn.start;
 
 import com.fbn.api.newgen.controller.Controller;
+import com.fbn.cp.CpMain;
+import com.fbn.tb.TbMain;
 import com.fbn.utils.ConstantsI;
+import com.fbn.utils.LoadProp;
+import com.fbn.utils.LogGen;
+import org.apache.log4j.Logger;
 
-public class Main extends Thread implements ConstantsI {
-    private final String sessionId;
+public class Main implements ConstantsI {
+    private final Logger logger = LogGen.getLoggerInstance("UtilityLogs");
 
-    public Main() {
-        this.sessionId = new Controller().getSessionId();
-   }
-    
 
-    private void disconnectSession (){
+    public void run() {
+       executeUtility();
+    }
+    private void disconnectSession (String sessionId){
         new Controller().disconnectSession(sessionId);
     }
 
-    public void run() {
-        //closeMarketWindow();
-        disconnectSession();
-        //new cpMain().run();
+    private void executeUtility (){
+        try {
+            while (true) {
+                String sessionId = new Controller().getSessionId();
+                CpMain cpMain = new CpMain(sessionId);
+                TbMain tbMain = new TbMain(sessionId);
+                Thread cp = new Thread(cpMain);
+                Thread tb = new Thread(tbMain);
+                cp.start();
+                tb.start();
+                cp.join();
+                tb.join();
+                disconnectSession(sessionId);
+                logger.info("Current thread name-- "+ Thread.currentThread().getName());
+                Thread.sleep(Long.parseLong(LoadProp.sleepTime));
+            }
+        }
+        catch (Exception e){
+            logger.info("Exception occurred in Main class-- "+e.getMessage());
+        }
     }
 }

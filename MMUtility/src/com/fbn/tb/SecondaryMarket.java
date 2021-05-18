@@ -10,7 +10,7 @@ import com.fbn.utils.ConstantsI;
 import com.fbn.utils.Query;
 
 
-public class SecondaryMarket implements Runnable, ConstantsI {
+public class SecondaryMarket implements  ConstantsI {
 	private  final String sessionId;   
     private Set<Map<String,String>> resultSet;
 
@@ -18,8 +18,8 @@ public class SecondaryMarket implements Runnable, ConstantsI {
         this.sessionId = sessionId;
     }
     
-    @Override
-    public void run() {
+
+    public void main() {
     	
     }
     

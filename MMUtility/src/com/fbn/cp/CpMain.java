@@ -7,6 +7,10 @@ public class CpMain implements Runnable {
     }
     @Override
     public void run() {
+        execute();
+    }
+
+    private void execute (){
         new PrimaryMarket(sessionId).main();
         new SecondaryMarket(sessionId).main();
     }

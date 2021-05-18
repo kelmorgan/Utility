@@ -14,6 +14,7 @@ public class LoadProp implements ConstantsI {
     public static String headOfficeTbAcctNo;
     public static String headOfficeTbSol;
     public static String utilityUser;
+    public static String sleepTime;
 
 
     static {
@@ -30,6 +31,7 @@ public class LoadProp implements ConstantsI {
             headOfficeCpSol = properties.getProperty(headOfficeCpSol);
             headOfficeTbAcctNo = properties.getProperty(headOfficeTbAcctNo);
             headOfficeTbSol = properties.getProperty(headOfficeTbSol);
+            sleepTime = properties.getProperty(sleepTimeLocal);
             logger.info("Done loading properties file");
         }
         catch (IOException ex){

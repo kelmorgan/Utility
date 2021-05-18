@@ -67,6 +67,7 @@ public interface ConstantsI {
 	String appSocketPortField = "SocketPort";
 	String configPath = "C:\\Users\\sn029154\\Documents\\Work\\Project\\util\\config\\mmutility.properties";
 	String logPath = "C:\\Users\\sn029154\\Documents\\Work\\Project\\util\\logs";
+	String sleepTimeLocal = "SLEEPTIME";
 
 
 	// API SERVICE NAMES

@@ -13,18 +13,16 @@ import com.fbn.utils.Query;
 import java.util.Map;
 import java.util.Set;
 
-public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
+public class PrimaryMarket extends Commons implements ConstantsI {
 	private String postResp;
 	private final String sessionId;
 
-	boolean postingIsSucessful = true; //for structure purpose
-	
 	public PrimaryMarket(String sessionId) {
         this.sessionId = sessionId;
     }
 	
-	@Override
-	public void run() {
+
+	public void main() {
 		closeTbMarketWindow();
 		processTbWorkitemsOnTreasuryUtilityWS();
 		processTbFailedBids();
@@ -69,7 +67,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
               	
                 //Unlien customer's principal
 		        //debit customer with the principal value
-                postResp = new IntegrationCall().postTransaction(custAcctNo,custSol,custPrincipal,tranPart,id,LoadProp.headOfficeTbAcctNo,LoadProp.headOfficeTbSol);
+                postResp = IntegrationCall.postTransaction(custAcctNo,custSol,custPrincipal,tranPart,id,LoadProp.headOfficeTbAcctNo,LoadProp.headOfficeTbSol);
  
                 if (postingIsSuccessful(postResp)) {
                 	String values = "'Approve', 'N'";
@@ -122,7 +120,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
                 String tranPart ="TB/"+id.toUpperCase()+"/FAILEDBID";
 
 	            //perform reversal
-                postResp = new IntegrationCall().postTransaction(LoadProp.headOfficeTbAcctNo,LoadProp.headOfficeTbSol,custPrincipal,tranPart,id,custAcctNo,custSol);
+                postResp = IntegrationCall.postTransaction(LoadProp.headOfficeTbAcctNo,LoadProp.headOfficeTbSol,custPrincipal,tranPart,id,custAcctNo,custSol);
                 
                 //Send notification to customer
                 new MailSetup(sessionId,id,fbnMailer,cusEmail,Commons.getUsersMailsInGroup("TUSERS"),mailSubject,mailMessage);
@@ -161,7 +159,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
                 
                 String condition = "winame = '"+id+"'";
 
-                postResp = new IntegrationCall().postSuccessBids(LoadProp.headOfficeTbAcctNo,LoadProp.headOfficeTbSol,custPrincipal,tranPart1,tranPart2,id,custAcctNo,custSol,allocationPercentage);
+                postResp = IntegrationCall.postSuccessBids(LoadProp.headOfficeTbAcctNo,LoadProp.headOfficeTbSol,custPrincipal,tranPart1,tranPart2,id,custAcctNo,custSol,allocationPercentage);
                 if (postingIsSuccessful(postResp)) {
                  // send notification to customer
                  new MailSetup(sessionId,id,fbnMailer,cusEmail,Commons.getUsersMailsInGroup("TUSERS"),mailSubject,mailMessage);
@@ -219,7 +217,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
 		    	}
 		    	else {
 		    		if(Commons.isMatured(maturityDate) && lienStatus.equalsIgnoreCase("N")) {
-		    			if(TresaurylienStatus == "N") {
+		    			if(TresaurylienStatus.equalsIgnoreCase("N") ) {
 		    				String column = "TB_DECISION";
 		    				String value = "'Approve'";
 		                    String condition = "winame = '"+id+"'";
@@ -244,7 +242,7 @@ public class PrimaryMarket extends Commons implements Runnable,ConstantsI {
 			 if(lienStatus.equalsIgnoreCase("N")) {
 				 
 				 //perform posting credit the principal or the interest to the customer based on *
-				 postResp = new IntegrationCall().postTransaction(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,cusPrincipal,tranPart,id,cusAcctNo,cusSol);
+				 postResp = IntegrationCall.postTransaction(LoadProp.headOfficeCpAcctNo,LoadProp.headOfficeCpSol,cusPrincipal,tranPart,id,cusAcctNo,cusSol);
 				 
 				 if (postingIsSuccessful(postResp)) {			 
 				 }
