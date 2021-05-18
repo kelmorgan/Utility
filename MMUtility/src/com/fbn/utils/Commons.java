@@ -6,24 +6,19 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Set;
-import com.fbn.utils.Query;
 
 import com.fbn.api.newgen.controller.Controller;
 
 public class Commons implements ConstantsI{
 	
 	public static Set<Map<String,String>> resultSet;
-	
     public static boolean isLeapYear (){
         return LocalDate.now().isLeapYear();
     }
     public static boolean isDateEqual (String date1, String date2){
         return LocalDate.parse(date1).isEqual(LocalDate.parse(date2));
     }
-    public static boolean compareDate(String startDate, String endDate){
-        return  LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dbDateTimeFormat)).isBefore(LocalDate.parse(startDate,DateTimeFormatter.ofPattern(dbDateTimeFormat)));
-    }
-    public static boolean compareDateTime(String date){
+    public static boolean checkClosedDate(String date){
         return LocalDateTime.now().isAfter(LocalDateTime.parse(date,DateTimeFormatter.ofPattern(dbDateTimeFormat)));       
     }
     public static boolean isMatured(String date){
@@ -52,9 +47,7 @@ public class Commons implements ConstantsI{
         String domain = "@firstbanknigeria.com";
         try {
         	resultSet = new Controller().getRecords(Query.getUsersInGroup(groupName));
-        	for (Map<String ,String> result : resultSet){
-                username.append(result.get("USERNAME")).append(domain).append(",");
-        	}
+        	for (Map<String ,String> result : resultSet) username.append(result.get("USERNAME")).append(domain).append(",");
         }catch (Exception e){
             return empty;
         }

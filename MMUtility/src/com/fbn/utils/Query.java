@@ -21,8 +21,8 @@ public class Query {
 	public static String getTbOpenWindowQuery(String marketType) {
         return  "select closedate, winame, refid from mm_setup_tbl where process = 'Treasury Bills' and markettype = '"+marketType+"' and closeflag = 'N'";
     }
-    public static String getCpPmBidsToProcessQuery () {
-        return "select custrefid, tenor, rate, ratetype from mm_bid_tbl where process = 'Commercial Paper' and markettype= 'primary' and processflag ='N' and groupindexflag = 'N'";
+    public static String getCpPmBidsToProcessQuery (String id) {
+        return "select custrefid, tenor, rate, ratetype from mm_bid_tbl where process = 'Commercial Paper' and markettype= 'primary' and processflag ='N' and groupindexflag = 'N' and winrefid = '"+id+"'";
     }
     public static String getTbWorkitemsOnTreasuryUtilityWS() {
     	return "select winame, tb_custAcctNum, tb_custAcctEmail, tb_schemecode,tb_BrnchPri_LienID, tb_status from MoneyMarket_ext where g_currws = 'Treasury_Utility' and assign = 'TreasuryUtility'";
@@ -42,8 +42,8 @@ public class Query {
     public static String getCpPostFailMaturityBids(String marketType) {
     	return "select custrefid from mm_bid_tbl where process = 'Commercial Paper' and markettype = '"+marketType+"' and postintegrationmatureflag = 'Y' and failedpostflag = 'Y' and maturedflag = 'Y'";
     }
-    public static String getCpInvestmentClosedateTbl() {
-    	return "select investmentid, closedate from mm_sminvestments_tbl"; 
+    public static String getCpInvestmentCloseDateQuery(String id) {
+    	return "select investmentid, closedate from mm_sminvestments_tbl where windowrefno = '"+id+"'";
     }
     public static String getTbIssuedBillsClosedateTbl() {
     	return "select winame, closedate from tb_smissuedbills_tbl";

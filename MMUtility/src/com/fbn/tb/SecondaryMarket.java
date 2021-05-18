@@ -35,7 +35,7 @@ public class SecondaryMarket implements  ConstantsI {
             String value = "'"+flag+"'";
             String condition = "refid = '"+id+"'";
 
-            if (Commons.compareDateTime(date)) {
+            if (Commons.checkClosedDate(date)) {
                 new Controller().updateRecords(sessionId, Query.setupTblName, Query.stColCloseFlag, value, condition);
             }
         }
@@ -49,7 +49,7 @@ public class SecondaryMarket implements  ConstantsI {
         for (Map<String, String> result : resultSet) {
         	    String date = result.get("MATURITYDATE");
         	    
-        	    if(Commons.compareDateTime(date)) {
+        	    if(Commons.checkClosedDate(date)) {
         	    	String id = result.get("WINAME");
         	    	String value = "'Closed'";
                 	String condition = "WINAME = '"+id+"'";   	

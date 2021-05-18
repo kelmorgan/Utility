@@ -39,7 +39,7 @@ public class PrimaryMarket extends Commons implements ConstantsI {
 	        for (Map<String ,String> result : resultSet){
 	        	 String date = result.get("CLOSEDATE");
 	        	 String winame = result.get(wiName); 
-	        	 	if (Commons.compareDateTime(date)) {
+	        	 	if (Commons.checkClosedDate(date)) {
 	        	        String id = result.get("REFID");
 	        	        String value = "'"+flag+"'";
 	        	        String condition = "refid = '"+id+"'";

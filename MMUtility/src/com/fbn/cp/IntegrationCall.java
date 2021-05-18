@@ -17,7 +17,7 @@ public class IntegrationCall implements ConstantsI {
             if(isPostSuccess(postResp)) return apiSuccess;
             else return apiFailed;
         }
-        return null;
+        return empty;
     }
 
     public static String postSuccessBids(String debitAcct,String debitSol,String amount,String transParts1,String transPart2,String remarks,String creditAcct,String creditSol,String allocationPercentage){

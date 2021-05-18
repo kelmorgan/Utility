@@ -18,7 +18,6 @@ public class Main implements ConstantsI {
     private void disconnectSession (String sessionId){
         new Controller().disconnectSession(sessionId);
     }
-
     private void executeUtility (){
         try {
             while (true) {
