@@ -3,13 +3,12 @@ package com.fbn.start;
 import com.fbn.api.newgen.controller.Controller;
 import com.fbn.cp.CpMain;
 import com.fbn.tb.TbMain;
+import com.fbn.utils.Commons;
 import com.fbn.utils.ConstantsI;
 import com.fbn.utils.LoadProp;
-import com.fbn.utils.LogGen;
-import org.apache.log4j.Logger;
 
-public class Main implements ConstantsI {
-    private final Logger logger = LogGen.getLoggerInstance("UtilityLogs");
+
+public class Main extends Commons implements ConstantsI {
 
 
     public void run() throws Exception {
