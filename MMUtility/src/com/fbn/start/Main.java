@@ -12,13 +12,13 @@ public class Main implements ConstantsI {
     private final Logger logger = LogGen.getLoggerInstance("UtilityLogs");
 
 
-    public void run() {
+    public void run() throws Exception {
        executeUtility();
     }
     private void disconnectSession (String sessionId){
         new Controller().disconnectSession(sessionId);
     }
-    private void executeUtility (){
+    private void executeUtility () throws Exception {
         try {
             while (true) {
                 String sessionId = new Controller().getSessionId();
@@ -37,6 +37,7 @@ public class Main implements ConstantsI {
         }
         catch (Exception e){
             logger.info("Exception occurred in Main class-- "+e.getMessage());
+            throw new Exception("Exception occurred in Main Class-- "+ e.getMessage());
         }
     }
 }
