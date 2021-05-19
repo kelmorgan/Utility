@@ -8,7 +8,7 @@ import com.fbn.utils.ConstantsI;
 import com.fbn.utils.LoadProp;
 
 
-public class Main extends Commons implements ConstantsI {
+public class Main implements ConstantsI {
 
 
     public void run() throws Exception {
@@ -30,12 +30,13 @@ public class Main extends Commons implements ConstantsI {
                 cp.join();
                 tb.join();
                 disconnectSession(sessionId);
-                logger.info("Current thread name-- "+ Thread.currentThread().getName());
+
+                Commons.logger.info("Current thread name-- "+ Thread.currentThread().getName());
                 Thread.sleep(Long.parseLong(LoadProp.sleepTime));
             }
         }
         catch (Exception e){
-            logger.info("Exception occurred in Main class-- "+e.getMessage());
+            Commons.logger.info("Exception occurred in Main class-- "+e.getMessage());
             throw new Exception("Exception occurred in Main Class-- "+ e.getMessage());
         }
     }

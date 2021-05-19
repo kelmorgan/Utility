@@ -11,7 +11,7 @@ import com.fbn.api.newgen.controller.Controller;
 import org.apache.log4j.Logger;
 
 public class Commons implements ConstantsI{
-    public final Logger logger = LogGen.getLoggerInstance("UtilityLogs");
+    public static final Logger logger = LogGen.getLoggerInstance("UtilityLogs");
 	public static Set<Map<String,String>> resultSet;
     public static boolean isLeapYear (){
         return LocalDate.now().isLeapYear();
